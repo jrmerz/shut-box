@@ -1,0 +1,215 @@
+<polymer-element name="sb-dice">
+  <template>
+    <style>
+      :host {
+        height: 100px;
+        display: inline-block;
+      }
+
+      figure {
+        border-radius: 5px;
+      }
+
+      .container-shapeD6 {
+        width: 100px;
+        height: 100px;
+        position: relative;
+        margin: 0 auto;
+        border: 1px none #CCC;
+        -webkit-perspective: 1000px;
+        -moz-perspective: 1000px;
+        -ms-perspective: 1000px;
+        -o-perspective: 1000px;
+        perspective: 1000px;
+        pointer-events: none;
+      }
+
+      #shapeD6 {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        /*margin: -80px auto 0 auto;*/
+        -webkit-transform-style: preserve-3d;
+        -moz-transform-style: preserve-3d;
+        -ms-transform-style: preserve-3d;
+        -o-transform-style: preserve-3d;
+        transform-style: preserve-3d;
+        -webkit-transition: -webkit-transform 500ms;
+        -moz-transition: -moz-transform 500ms;
+        -o-transition: -o-transform 500ms;
+        transition: transform 500ms;
+      }
+
+      #shapeD6 figure {
+        display: block;
+        position: absolute;
+        width: 96px;
+        height: 96px;
+        border: 2px solid white;
+        line-height: 96px;
+        font-size: 60px;
+        font-weight: bold;
+        color: white;
+        text-align: center;
+        margin: 0;
+      }
+
+      #shapeD6.panels-backface-invisible figure {
+        -webkit-backface-visibility: hidden;
+        -moz-backface-visibility: hidden;
+        -ms-backface-visibility: hidden;
+        -o-backface-visibility: hidden;
+        backface-visibility: hidden;
+      }
+
+      #shapeD6 .side1  { background: hsla( 0, 100%, 40%, 0.8 ); }
+      #shapeD6 .side2   { background: hsla( 0, 100%, 40%, 0.8 ); }
+      #shapeD6 .side3  { background: hsla( 0, 100%, 40%, 0.8 ); }
+      #shapeD6 .side4   { background: hsla( 0, 100%, 40%, 0.8 ); }
+      #shapeD6 .side5    { background: hsla( 0, 100%, 40%, 0.8 ); }
+      #shapeD6 .side6 { background: hsla( 0, 100%, 40%, 0.8 ); }
+
+      #shapeD6 .side1  {
+        -webkit-transform: translateZ( 50px );
+        -moz-transform: translateZ( 50px );
+        -ms-transform: translateZ( 50px );
+        -o-transform: translateZ( 50px );
+        transform: translateZ( 50px );
+      }
+      #shapeD6 .side2   {
+        -webkit-transform: rotateX( -180deg ) translateZ( 50px );
+        -moz-transform: rotateX( -180deg ) translateZ( 50px );
+        -ms-transform: rotateX( -180deg ) translateZ( 50px );
+        -o-transform: rotateX( -180deg ) translateZ( 50px );
+        transform: rotateX( -180deg ) translateZ( 50px );
+      }
+      #shapeD6 .side3 {
+        -webkit-transform: rotateY(   90deg ) translateZ( 50px );
+        -moz-transform: rotateY(   90deg ) translateZ( 50px );
+        -ms-transform: rotateY(   90deg ) translateZ( 50px );
+        -o-transform: rotateY(   90deg ) translateZ( 50px );
+        transform: rotateY(   90deg ) translateZ( 50px );
+      }
+      #shapeD6 .side4 {
+        -webkit-transform: rotateY(  -90deg ) translateZ( 50px );
+        -moz-transform: rotateY(  -90deg ) translateZ( 50px );
+        -ms-transform: rotateY(  -90deg ) translateZ( 50px );
+        -o-transform: rotateY(  -90deg ) translateZ( 50px );
+        transform: rotateY(  -90deg ) translateZ( 50px );
+      }
+      #shapeD6 .side5 {
+        -webkit-transform: rotateX(   90deg ) translateZ( 50px );
+        -moz-transform: rotateX(   90deg ) translateZ( 50px );
+        -ms-transform: rotateX(   90deg ) translateZ( 50px );
+        -o-transform: rotateX(   90deg ) translateZ( 50px );
+        transform: rotateX(   90deg ) translateZ( 50px );
+      }
+      #shapeD6 .side6 {
+        -webkit-transform: rotateX(  -90deg ) translateZ( 50px );
+        -moz-transform: rotateX(  -90deg ) translateZ( 50px );
+        -ms-transform: rotateX(  -90deg ) translateZ( 50px );
+        -o-transform: rotateX(  -90deg ) translateZ( 50px );
+        transform: rotateX(  -90deg ) translateZ( 50px );
+      }
+      #shapeD6.show-side1 {
+        -webkit-transform: translateZ( -100px );
+        -moz-transform: translateZ( -100px );
+        -ms-transform: translateZ( -100px );
+        -o-transform: translateZ( -100px );
+        transform: translateZ( -100px );
+      }
+      #shapeD6.show-side2 {
+        -webkit-transform: translateZ( -100px ) rotateX( -180deg );
+        -moz-transform: translateZ( -100px ) rotateX( -180deg );
+        -ms-transform: translateZ( -100px ) rotateX( -180deg );
+        -o-transform: translateZ( -100px ) rotateX( -180deg );
+        transform: translateZ( -100px ) rotateX( -180deg );
+      }
+      #shapeD6.show-side3 {
+        -webkit-transform: translateZ( -100px ) rotateY(  -90deg );
+        -moz-transform: translateZ( -100px ) rotateY(  -90deg );
+        -ms-transform: translateZ( -100px ) rotateY(  -90deg );
+        -o-transform: translateZ( -100px ) rotateY(  -90deg );
+        transform: translateZ( -100px ) rotateY(  -90deg );
+      }
+      #shapeD6.show-side4 {
+        -webkit-transform: translateZ( -100px ) rotateY(   90deg );
+        -moz-transform: translateZ( -100px ) rotateY(   90deg );
+        -ms-transform: translateZ( -100px ) rotateY(   90deg );
+        -o-transform: translateZ( -100px ) rotateY(   90deg );
+        transform: translateZ( -100px ) rotateY(   90deg );
+      }
+      #shapeD6.show-side5 {
+        -webkit-transform: translateZ( -100px ) rotateX(  -90deg );
+        -moz-transform: translateZ( -100px ) rotateX(  -90deg );
+        -ms-transform: translateZ( -100px ) rotateX(  -90deg );
+        -o-transform: translateZ( -100px ) rotateX(  -90deg );
+        transform: translateZ( -100px ) rotateX(  -90deg );
+      }
+      #shapeD6.show-side6 {
+        -webkit-transform: translateZ( -100px ) rotateX(   90deg );
+        -moz-transform: translateZ( -100px ) rotateX(   90deg );
+        -ms-transform: translateZ( -100px ) rotateX(   90deg );
+        -o-transform: translateZ( -100px ) rotateX(   90deg );
+        transform: translateZ( -100px ) rotateX(   90deg );
+      }
+
+      .container-shapeD6 {
+        width: 100px;
+        height: 100px;
+        position: relative;
+        margin: 0 auto;
+        border: 1px none #CCC;
+        -webkit-perspective: 1000px;
+        -moz-perspective: 1000px;
+        -ms-perspective: 1000px;
+        -o-perspective: 1000px;
+        perspective: 1000px;
+        pointer-events: none;
+      }
+    </style>
+
+    <div class="container-shapeD6">
+      <div id="shapeD6" class="show-side2">
+        <figure class="side1">1</figure>
+        <figure class="side2">2</figure>
+        <figure class="side3">3</figure>
+        <figure class="side4">4</figure>
+        <figure class="side5">5</figure>
+        <figure class="side6">6</figure>
+      </div>
+    </div>
+  </template>
+  <script>
+    Polymer('sb-dice', {
+      interval : -1,
+      rand : -1,
+
+      roll : function() {
+        this.clear();
+        this.interval = setInterval(function(){
+          if( this.rand != -1 ) this.$.shapeD6.classList.remove('show-side'+this.rand);
+          
+          var rand = SB.dice.roll();
+          while( rand == this.rand ) rand = SB.dice.roll();
+          this.rand = rand;
+
+          this.$.shapeD6.classList.add('show-side'+this.rand);
+        }.bind(this), 350);
+      },
+
+      setValue : function(val) {
+        this.clear();
+        this.$.shapeD6.classList.add('show-side'+val);
+      },
+
+      clear : function() {
+        if( this.interval != -1 ) clearInterval(this.interval);
+
+        for( var i = 1; i <= 6; i++ ) {
+          this.$.shapeD6.classList.remove('show-side'+i);
+        }
+      }
+    });
+  </script>
+</polymer-element>

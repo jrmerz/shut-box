@@ -1,0 +1,54 @@
+<polymer-element name="sb-app">
+    <template>
+
+        <sb-router defaultRoute="home" on-page-change="{{onPageChange}}">
+            <sb-home route="home"></sb-home>
+            <div id="gameParent" route="game"></div>
+        </sb-router>
+
+    </template>
+    <script>
+        Polymer('sb-app', {
+            ds : null,
+            currentGame : null,
+            location : null,
+
+            observe : {
+                'ds.games' : 'setGame'
+            },
+
+            ready : function() {
+                this.ds = document.querySelector('sb-datastore');
+            },
+
+            onPageChange : function(e) {
+                this.location = e.detail;
+                this.setGame();
+            },
+
+            setGame : function() {
+                if( !this.location ) return; 
+                if( this.location[0] != 'game' ) return;
+                if( this.currentGame && this.currentGame.data.id == this.location[1] ) return;
+
+                if( this.currentGame ) {
+                    this.currentGame.state = 'background';
+                    $(this.currentGame).remove();
+                }
+                
+
+                this.currentGame = null;
+                for( var i = 0; i < this.ds.games.length; i++ ) {
+                    if( this.ds.games[i].data.id == this.location[1] ) {
+                        this.currentGame = this.ds.games[i];
+                    }
+                }
+
+                if( this.currentGame ) {
+                    this.currentGame.state = 'play';
+                    $(this.$.gameParent).append(this.currentGame);
+                }
+            }
+        });
+    </script>
+</polymer-element>

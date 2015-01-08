@@ -1,0 +1,275 @@
+<polymer-element name="sb-game-overview" attributes="game">
+    <template>
+        <style>
+            :host {
+                display: inline-block;
+                padding: 10px;
+                margin: 10px;
+                background-color: white;
+                border: 1px solid #ccc;
+                width: 400px;
+                border-radius: 6px;
+            }
+            :host([type="started"]) {
+                border: 1px solid #398439;
+                box-shadow: 2px 2px 2px #398439;
+            }
+            :host([type="waitingToStart"]) {
+                border: 1px solid #2e6da4;
+                box-shadow: 2px 2px 2px #2e6da4;
+            }
+            :host([type="empty"]) {
+                border: 1px solid #888;
+                box-shadow: 2px 2px 2px #888;
+            }
+            :host([type="waiting"]) {
+                border: 1px solid #eea236;
+                box-shadow: 2px 2px 2px #eea236;
+            }
+            :host([type="needsApproval"]) {
+                border: 1px solid #d43f3a;
+                box-shadow: 2px 2px 2px #d43f3a;
+            }
+            .add {
+                padding: 5px;
+                margin: 5px;
+                box-shadow: 0 0 4px #888 inset;
+            }
+            .active {
+                background-color: #5cb85c;
+                color: white;
+                padding: 5px;
+                margin: 0 10px 10px 0;
+                border-radius: 6px;
+            }
+            ul {
+                margin: 5px 0 0 0 !important;
+                list-style: none;
+                padding: 5px;
+                background-color: #eee;
+                border-radius: 6px;
+            }
+            ul li {
+                margin: 8px 0 0 0;
+            }
+        </style>
+        
+        <div layout horizontal>
+            <div flex>
+
+                <div hidden?="{{state != 'started'}}" class="active">
+                    <div class="started">Active</div>
+                    <div class="round">Round: {{game.data.round+1}}</div>
+                    <div class="round">Turn: <b>{{game.data.turn.player.username}}</b>, Roll: {{game.data.turn.roll+1}}</div>
+                </div>
+
+            </div>
+            <div>
+                <template bind if="{{state == 'needsApproval'}}">
+                    <a class="btn btn-default" on-click="{{join}}">Join Game</a>
+                </template>
+
+                <template bind if="{{state == 'waitingToStart'}}">
+                    <button class="btn btn-default" on-click="{{start}}">Start</button>
+                </template>
+                <template bind if="{{state == 'started'}}">
+                    <a class="btn btn-default" href="#game/{{game.data.id}}">Go to Game</a>
+                </template>
+            </div>
+        </div>
+
+        <div hidden?="{{otherPlayers.length == 0}}">
+            <b>Other Players: </b><br />
+            <table class="table" style="margin-bottom:0">
+                <tr template repeat="{{player in otherPlayers}}">
+                    <td>
+                        <img src="{{player.photo}}" class="img-rounded" style="width:25px" /> {{player.username}}
+                    </td>
+                    <td>
+                        <span hidden?="{{!player.joined}}">
+                            <span hidden?="{{!player.connected}}" style="color:green">Online</span>
+                            <span hidden?="{{player.connected}}" style="color:#888">Offline</span>
+                        </span>
+                        <span hidden?="{{player.joined}}" style="color:#888">Waiting to Join</span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div hidden?="{{state != 'empty'}}">
+            Playing with yourself is no fun... why not add someone else?
+        </div>
+
+        <sb-player-search id="addPlayers"></sb-player-search>
+
+        <ul>
+            <li hidden?="{{state == 'started' || state == 'needsApproval'}}">
+                <a style="cursor:pointer" on-click="{{showPopup}}">Add Players</a>
+            </li>
+            <li hidden?="{{state == 'started'}}">
+                <a style="cursor:pointer" on-click="{{delete}}">Delete Game</a>
+            </li>
+            <li>
+                Created: {{createdDate}}
+            </li>
+        <ul>
+    </template>
+    <script>
+        Polymer('sb-game-overview', {
+            user : null,
+            game : null,
+
+            createdDate : '',
+            otherPlayers : [],
+
+            // users object in game
+            self : {},
+
+            // show the player add section
+            showAdd : false,
+
+            // this ready
+            state : '',
+
+
+            // which game are we bound to
+            bindId : '',
+            observe : {
+                game : 'onGameUpdated',
+                user : 'onPlayersUpdated',
+                'game.data.players' : 'onPlayersUpdated',
+                'game.connected' : 'onPlayersUpdated'
+            },
+
+            ready : function() {
+                this.$.addPlayers.addEventListener('select', this.addPlayer.bind(this));
+                $(this.$.addPlayers).remove();
+
+                document.querySelector('sb-user').onUserLoad(function(user){
+                    this.user = user;
+                }.bind(this));
+            },
+
+            showPopup : function() {
+                document.querySelector('sb-popup').set('Add Players', this.$.addPlayers, true);
+            },
+
+            updateState : function() {
+                if( !this.user ) return;
+                this.removeAttribute('type');
+
+                if( this.game.data.started ) {
+                    this.setAttribute('type','started');
+                    this.state = 'started';
+                } else if ( this.game.data.players.length <= 1 ) {
+                    this.setAttribute('type','empty');
+                    this.state = 'empty';
+                } else if ( this._needsApproval() ) {
+                    this.setAttribute('type','needsApproval');
+                    this.state = 'needsApproval';
+                } else if ( this._waitingToStart() ) {
+                    this.setAttribute('type','waitingToStart');
+                    this.state = 'waitingToStart';
+                } else {
+                    this.setAttribute('type', 'waiting');
+                    this.state = 'waiting';
+                }
+
+                this.fire('state-updated');
+            },
+
+            _waitingToStart : function() {
+                if( this.game.data.players.length < 2 ) return false;
+                if( this.game.data.started ) return false;
+
+                for( var i = 0; i < this.game.data.players.length; i++ ) {
+                    if( this.game.data.players[i].joined == false ) return false;
+                }
+                return true;
+            },
+
+            _needsApproval : function() {
+                for( var i = 0; i < this.game.data.players.length; i++ ) {
+                    if( this.game.data.players[i].joined == false && 
+                        this.game.data.players[i].username == this.user.username ) return true;
+                }
+                return false;
+            },
+
+            onGameUpdated : function() {
+                var d = new Date(this.game.data.created);
+                this.createdDate = [
+                    d.getMonth()+1,
+                    d.getDate(),
+                    d.getYear()+1900
+                ].join('/');
+
+                if( this.bindId == '' ) {
+                    this.game.addEventListener('remote-update', this.onPlayersUpdated.bind(this));
+                    this.bindId = this.game.data.id;
+                } else if( this.bindId != this.game.data.id) {
+                    alert('Overview panel attempting to bind to second game!!')
+                }
+
+                this.updateState();
+            },
+
+            addPlayer : function(e) {
+                var player = e.detail;
+                this.game.addPlayer(player);
+            },
+
+            onPlayersUpdated : function() {
+                if( !this.user ) return;
+                if( !this.game.data.players ) return;
+
+                this.self = {};
+                this.otherPlayers = [];
+
+                for( var i = 0; i < this.game.data.players.length; i++ ) {
+                    if( this.game.data.players[i].username != this.user.username ) {
+                        this.addOtherPlayer(this.game.data.players[i]);
+                    } else {
+                        this.self = this.game.data.players[i];
+                    }
+                }
+
+                this.updateState();
+            },
+
+            addOtherPlayer : function(player) {
+                var p = $.extend(true, {}, player);
+                if( this.game.connected.indexOf(p.username) > -1 ) {
+                    p.connected = true;
+                } else {
+                    p.connected = false;
+                }
+                this.otherPlayers.push(p);
+            },
+
+            join : function() {
+                this.game.join(this.self);
+                this.async(function(){
+                    this.updateState();
+                });
+            },
+
+            toggleShow : function() {
+                this.showAdd = !this.showAdd;
+            },
+
+            start : function() {
+                this.game.start();
+                window.location = '#game/'+this.game.data.id;
+            },
+
+            'delete' : function() {
+                if( !confirm('Are you sure you want to delete this game?!') ) return;
+                $.get('/rest/deleteGame?id='+this.game.data.id, function(resp){
+                    if( resp.error ) return alert('Server Error Deleting Game :(');
+                    document.querySelector('sb-datastore').deleteGame(this.game.data.id);
+                }.bind(this));
+            }
+        });
+    </script>
+</polymer-element>

@@ -1,0 +1,40 @@
+<html>
+<head>
+    <title>Create Account</title>
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+</head>
+<body>
+
+    <h4>Please set a username: </h4>
+    <div>
+        Name: <span id="name"></span><br />
+        Email: <span id="email"></span><br />
+        Display Name: <input type="text" id="username" />
+    </div>
+
+    <button>Create</button>
+    <div id="creating" style="display:none">Creating...</div>
+
+    <script>
+        var user;
+        $.get('/rest/user',function(resp) {
+            user = resp;
+            $('#name').html(resp.name);
+            $('#email').html(resp.email);
+        });
+
+        $('button').on('click', function(){
+            var username = $('#username').val();
+            if( username.length < 3 ) return alert('Must be more than 3 characters');
+
+            $('#creating').show();
+            $.get('/rest/setUsername?username='+username, function(resp){
+                $('#creating').hide();
+
+                if( resp.error ) return alert(resp.message);
+                window.location = '/';
+            });
+        });
+    </script>
+</body>
+</html>
