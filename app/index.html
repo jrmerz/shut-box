@@ -14,14 +14,18 @@
   <link rel="stylesheet" href="styles/main.css">
   <!-- endbuild-->
 
+  <!-- build:js scripts/build.js -->
   <script src="bower_components/webcomponentsjs/webcomponents.js"></script>
   <script src="bower_components/jquery/dist/jquery.js"></script>
   <script src="bower_components/isotope/dist/isotope.pkgd.js"></script>
   <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
-
-  <!-- build:vulcanized elements/elements.vulcanized.html -->
-  <link rel="import" href="elements/elements.html">
+  <script src="scripts/app.js"></script>
+  <script src="scripts/dice.js"></script>
+  <script src="scripts/game.js"></script>
   <!-- endbuild-->
+    
+  <link rel="import" href="elements.html">
+
 </head>
 
 <body unresolved>
@@ -30,12 +34,6 @@
 
   <sb-app></sb-app>
   <sb-toast></sb-toast>
-
-  <!-- build:js scripts/app.js -->
-  <script src="scripts/app.js"></script>
-  <script src="scripts/dice.js"></script>
-  <script src="scripts/game.js"></script>
-  <!-- endbuild-->
 
   <sb-socket></sb-socket>
   <sb-datastore></sb-datastore>
