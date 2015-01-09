@@ -13,7 +13,8 @@
     "passport-google-oauth": "^0.1.5",
     "passport.socketio": "^3.4.1",
     "redis": "^0.12.1",
-    "socket.io": "^1.2.1"
+    "socket.io": "^1.2.1",
+    "request": "^2.51.0"
   },
   "devDependencies": {
     "grunt": "~0.4.1",

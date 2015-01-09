@@ -4,6 +4,7 @@ var express = require('express');
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
+var request = require('request');
 
 var auth = require('./lib/auth.js');
 var games = require('./lib/games.js');
@@ -31,6 +32,12 @@ function onConnection() {
     games.init(app, mongo, socket);
 
     app.use(express.static(__dirname +  (isProd ? '/dist' : '/app') ));
+
+    // proxy call, helps get around apache websocket proxy
+    app.get('/socket.io.js', function(req, resp){
+        resp.setHeader('Content-Type', 'application/javascript');
+        request('http://localhost:3000/socket.io/socket.io.js').pipe(resp);
+    });
 
 
     app.get('/rest/players', function(req, resp){
