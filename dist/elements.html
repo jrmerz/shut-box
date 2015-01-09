@@ -296,6 +296,53 @@ html /deep/ [segment], html /deep/ segment {
 
 
 <!--<link rel="import" href="../polymer-dev/polymer.html">--> </div>
+<div hidden><!--
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<!--
+/**
+ * @group Polymer Core Elements
+ * @element core-media-query
+ * @status beta
+ * @homepage github.io
+ *
+ * core-media-query can be used to data bind to a CSS media query.
+ * The "query" property is a bare CSS media query.
+ * The "queryMatches" property will be a boolean representing if the page matches that media query.
+ *
+ * core-media-query uses media query listeners to dynamically update the "queryMatches" property.
+ * A "core-media-change" event also fires when queryMatches changes.
+ *
+ * Example:
+ *
+ *      <core-media-query query="max-width: 640px" queryMatches="{{phoneScreen}}"></core-media-query>
+ *
+ */
+
+ /**
+  * Fired when the media query state changes
+  *
+  * @event core-media-change
+  */
+-->
+
+
+<polymer-element name="core-media-query" attributes="query queryMatches" assetpath="bower_components/core-media-query/">
+  <template>
+    <style>
+      :host {
+        display: none;
+      }
+    </style>
+  </template>
+  
+</polymer-element>
+</div>
 
 
 <div hidden><polymer-element name="sb-card" noscript="" assetpath="elements/ui/">
@@ -418,11 +465,16 @@ html /deep/ [segment], html /deep/ segment {
             :host {
                 display: inline-block;
                 padding: 10px;
-                margin: 10px;
+                margin: 10px 0;
                 background-color: white;
                 border: 1px solid #ccc;
-                width: 400px;
+                width: 375px;
                 border-radius: 6px;
+            }
+            :host([phone]) {
+                display: block;
+                width:100%;
+                margin: 7px 0;
             }
             :host([type="started"]) {
                 border: 1px solid #398439;
@@ -467,6 +519,8 @@ html /deep/ [segment], html /deep/ segment {
                 margin: 8px 0 0 0;
             }
         </style>
+
+        <core-media-query query="max-width: 768px" querymatches="{{phoneScreen}}"></core-media-query>
         
         <div layout="" horizontal="">
             <div flex="">
@@ -554,9 +608,10 @@ html /deep/ [segment], html /deep/ segment {
                     <template repeat="{{card, i in cards}}">
                         <sb-flipper index="{{i}}" active?="{{card.active}}" selected?="{{card.selected}}" open?="{{!card.selected &amp;&amp; !card.active}}" on-tap="{{select}}">
                             {{card.value}}
-                        </sb-flipper></template></div>
-                    </div></template>
-                
+                        </sb-flipper>
+                    </template>
+                </div>
+
 
                 <button on-click="{{setMove}}" class="btn btn-default">Set Move</button>
 
@@ -580,10 +635,10 @@ html /deep/ [segment], html /deep/ segment {
                         <td>{{info.score}}</td>
                     </tr>
                 </table>
-            
+            </div>
 
         </template>
-    
+    </template>
     
 </polymer-element></div>
 <div hidden><polymer-element name="sb-toast" assetpath="elements/">
@@ -899,17 +954,19 @@ html /deep/ [segment], html /deep/ segment {
         </sb-card>
 
         <sb-card>
-            <div layout="" horizontal="">
-                <div class="btn-group" role="group">
-                    <a class="btn btn-default active" on-click="{{onFilterBtn}}" filter="*">All</a>
-                    <a class="btn btn-default" on-click="{{onFilterBtn}}" filter="started">Started</a>
-                    <a class="btn btn-default" on-click="{{onFilterBtn}}" filter="waitingToStart">Ready to Start</a>
-                    <a class="btn btn-default" on-click="{{onFilterBtn}}" filter="empty">Empty</a>
-                    <a class="btn btn-default" on-click="{{onFilterBtn}}" filter="waiting">Waiting on Others</a>
-                    <a class="btn btn-default" on-click="{{onFilterBtn}}" filter="needsApproval">Waiting on You</a>
-                    
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="btn-group" role="group">
+                        <a class="btn btn-default active" on-click="{{onFilterBtn}}" filter="*">All</a>
+                        <a class="btn btn-default" on-click="{{onFilterBtn}}" filter="started">Started</a>
+                        <a class="btn btn-default" on-click="{{onFilterBtn}}" filter="waitingToStart">Ready to Start</a>
+                        <a class="btn btn-default" on-click="{{onFilterBtn}}" filter="empty">Empty</a>
+                        <a class="btn btn-default" on-click="{{onFilterBtn}}" filter="waiting">Waiting on Others</a>
+                        <a class="btn btn-default" on-click="{{onFilterBtn}}" filter="needsApproval">Waiting on You</a>
+                        
+                    </div>
                 </div>
-                <div flex="">
+                <div class="col-sm-4">
                     <h4 style="text-align:right" id="filterText">All Games</h4>
                 </div>
             </div>

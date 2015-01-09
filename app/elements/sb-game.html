@@ -21,9 +21,10 @@
                             open?="{{!card.selected && !card.active}}"
                             on-tap="{{select}}">
                             {{card.value}}
-                        </div>
+                        </sb-flipper>
                     </template>
                 </div>
+
 
                 <button on-click="{{setMove}}" class="btn btn-default">Set Move</button>
 

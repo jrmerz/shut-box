@@ -4,11 +4,16 @@
             :host {
                 display: inline-block;
                 padding: 10px;
-                margin: 10px;
+                margin: 10px 0;
                 background-color: white;
                 border: 1px solid #ccc;
-                width: 400px;
+                width: 375px;
                 border-radius: 6px;
+            }
+            :host([phone]) {
+                display: block;
+                width:100%;
+                margin: 7px 0;
             }
             :host([type="started"]) {
                 border: 1px solid #398439;
@@ -53,6 +58,8 @@
                 margin: 8px 0 0 0;
             }
         </style>
+
+        <core-media-query query="max-width: 768px" queryMatches="{{phoneScreen}}"></core-media-query>
         
         <div layout horizontal>
             <div flex>
@@ -116,6 +123,8 @@
     </template>
     <script>
         Polymer('sb-game-overview', {
+            phoneScreen : false,
+
             user : null,
             game : null,
 
@@ -138,7 +147,8 @@
                 game : 'onGameUpdated',
                 user : 'onPlayersUpdated',
                 'game.data.players' : 'onPlayersUpdated',
-                'game.connected' : 'onPlayersUpdated'
+                'game.connected' : 'onPlayersUpdated',
+                phoneScreen : 'updateDisplay'
             },
 
             ready : function() {
@@ -148,6 +158,16 @@
                 document.querySelector('sb-user').onUserLoad(function(user){
                     this.user = user;
                 }.bind(this));
+            },
+
+            updateDisplay : function() {
+                if( this.phoneScreen ) {
+                    this.setAttribute('phone','');
+                } else {
+                    this.removeAttribute('phone');
+                }
+
+                this.fire('state-updated');
             },
 
             showPopup : function() {
