@@ -1007,7 +1007,7 @@ return c[b]},styleCacheForScope:function(a){if(d){var b=a.host?a.host.localName:
                     this.user = user;
                 }.bind(this));
 
-                this.socket = io.connect(window.location.protocol+'//'+'ws.'+window.location.host);
+                this.socket = io.connect(window.location.protocol+'//'+window.location.host.split(':')[0]+':3000');
                 //this.socket = io.connect('/');
 
                 this.socket.on('connected', function(data){
