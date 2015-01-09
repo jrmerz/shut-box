@@ -876,24 +876,26 @@ return c[b]},styleCacheForScope:function(a){if(d){var b=a.host?a.host.localName:
             cType : '*',
 
             ready : function() {
-                document.querySelector('sb-user').onUserLoad(function(user){
-                    this.user = user;
-                }.bind(this));
-                
-                this.ds = document.querySelector('sb-datastore');
-                this.ds.addEventListener('update', function(e){
-                    if( !this.showing ) return;
-                    this.async(function(){
-                        this.filter('*');
-                    });
-                }.bind(this));
+                Polymer.whenPolymerReady(function() {
+                    document.querySelector('sb-user').onUserLoad(function(user){
+                        this.user = user;
+                    }.bind(this));
+                    
+                    this.ds = document.querySelector('sb-datastore');
+                    this.ds.addEventListener('update', function(e){
+                        if( !this.showing ) return;
+                        this.async(function(){
+                            this.filter('*');
+                        });
+                    }.bind(this));
 
-                document.querySelector('sb-socket').on('join-request', function(data){
-                    document.querySelector('sb-toast').addMessage(
-                        'You have been invited to play a game with: '+data.users.join(', ')
-                    );
+                    document.querySelector('sb-socket').on('join-request', function(data){
+                        document.querySelector('sb-toast').addMessage(
+                            'You have been invited to play a game with: '+data.users.join(', ')
+                        );
 
-                    this.ds.loadGame(data.game);
+                        this.ds.loadGame(data.game);
+                    }.bind(this));
                 }.bind(this));
             },
 
@@ -1005,7 +1007,8 @@ return c[b]},styleCacheForScope:function(a){if(d){var b=a.host?a.host.localName:
                     this.user = user;
                 }.bind(this));
 
-                this.socket = io.connect('/');
+                this.socket = io.connect(window.location.protocol+'//'+'ws.'+window.location.host);
+                //this.socket = io.connect('/');
 
                 this.socket.on('connected', function(data){
                     this.id = data.id;

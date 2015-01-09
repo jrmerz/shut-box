@@ -16,7 +16,8 @@
                     this.user = user;
                 }.bind(this));
 
-                this.socket = io.connect('/');
+                this.socket = io.connect(window.location.protocol+'//'+'ws.'+window.location.host);
+                //this.socket = io.connect('/');
 
                 this.socket.on('connected', function(data){
                     this.id = data.id;
