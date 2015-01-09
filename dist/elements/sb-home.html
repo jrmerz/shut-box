@@ -1,0 +1,222 @@
+<polymer-element name="sb-home">
+    <template>
+        <style>
+            a[filter="started"] {
+                color: #398439 !important;
+            }
+            a[filter="waitingToStart"] {
+                color: #2e6da4 !important;
+            }
+            a[filter="empty"] {
+                color: #888 !important;
+            }
+            a[filter="waiting"] {
+                color: #eea236 !important;
+            }
+            a[filter="needsApproval"] {
+                color: #d43f3a !important;
+            }
+        </style>
+
+        <sb-card>
+            <sb-create-game id="create"></sb-create-game>
+        </sb-card>
+
+        <sb-card>
+            <div layout horizontal>
+                <div class="btn-group" role="group">
+                    <a class="btn btn-default active" on-click="{{onFilterBtn}}" filter="*">All</a>
+                    <a class="btn btn-default" on-click="{{onFilterBtn}}" filter="started">Started</a>
+                    <a class="btn btn-default" on-click="{{onFilterBtn}}" filter="waitingToStart">Ready to Start</a>
+                    <a class="btn btn-default" on-click="{{onFilterBtn}}" filter="empty">Empty</a>
+                    <a class="btn btn-default" on-click="{{onFilterBtn}}" filter="waiting">Waiting on Others</a>
+                    <a class="btn btn-default" on-click="{{onFilterBtn}}" filter="needsApproval">Waiting on You</a>
+                    
+                </div>
+                <div flex>
+                    <h4 style="text-align:right" id="filterText">All Games</h4>
+                </div>
+            </div>
+
+            <div id="cards">
+                <template repeat="{{game in ds.games}}">
+                    <sb-game-overview game="{{game}}" on-state-updated="{{_delayUpdate}}"></sb-game-overview>
+                </template>
+            </div>
+        </sb-card>
+
+        <!--<template bind if="{{games.emptyGames.length > 0}}">
+            <sb-card>
+                <h4>Game Created, no invite players...</h4>
+                <template repeat="{{game in games.emptyGames}}">
+                    <sb-game-overview game="{{game}}"></sb-game-overview>
+                </template>
+            </sb-card>
+        </template>
+
+        <template bind if="{{games.active.length > 0}}">
+            <sb-card>
+                <h4>Active Games</h4>
+                <template repeat="{{game in games.active}}">
+                    <sb-game-overview game="{{game}}"></sb-game-overview>
+                </template>
+            </sb-card>
+        </template>
+
+        
+
+        <template bind if="{{games.waitingToStart.length > 0}}">
+            <sb-card>
+                <h4>All Set, just hit Start</h4>
+                <template repeat="{{game in games.waitingToStart}}">
+                    <sb-game-overview game="{{game}}"></sb-game-overview>
+                </template>
+            </sb-card>
+        </template>
+
+        <template bind if="{{games.needsApproval.length > 0}}">
+            <sb-card>
+                <h4>Your Invited</h4>
+                <template repeat="{{game in games.needsApproval}}">
+                    <sb-game-overview game="{{game}}"></sb-game-overview>
+                </template>
+            </sb-card>
+        </template>
+
+        <template bind if="{{games.waiting.length > 0}}">
+            <sb-card>
+                <h4>Waiting for others to join</h4>
+                <template repeat="{{game in games.waiting}}">
+                    <sb-game-overview game="{{game}}"></sb-game-overview>
+                </template>
+            </sb-card>
+        </template>-->
+
+    </template>
+    <script>
+        Polymer('sb-home', {
+
+            user : null,
+            ds : null,
+            showing: false,
+            init : false,
+            updateTimer : -1,
+            cType : '*',
+
+            ready : function() {
+                document.querySelector('sb-user').onUserLoad(function(user){
+                    this.user = user;
+                }.bind(this));
+                
+                this.ds = document.querySelector('sb-datastore');
+                this.ds.addEventListener('update', function(e){
+                    if( !this.showing ) return;
+                    this.async(function(){
+                        this.filter('*');
+                    });
+                }.bind(this));
+
+                document.querySelector('sb-socket').on('join-request', function(data){
+                    document.querySelector('sb-toast').addMessage(
+                        'You have been invited to play a game with: '+data.users.join(', ')
+                    );
+
+                    this.ds.loadGame(data.game);
+                }.bind(this));
+            },
+
+            onShow : function() {
+                this.showing = true;
+                /*$(this.$.cards).isotope({
+                  itemSelector: 'sb-game-overview',
+                  layoutMode: 'fitRows',
+                });*/
+                setTimeout(function(){
+                   this.filter('*'); 
+                }.bind(this), 200);
+            },
+
+            clearActiveBtn : function() {
+                var ele = this.shadowRoot.querySelector('a.btn-default.active');
+                if( ele ) ele.classList.remove('active');
+            },
+
+            onFilterBtn : function(e) {
+                this.filter(e.currentTarget.getAttribute('filter'));
+            },
+
+            _delayUpdate : function() {
+                if( this.updateTimer != -1 ) clearTimeout(this.updateTimer);
+
+                this.updateTimer = setTimeout(function(){
+                    this.updateTimer = -1;
+
+                    this.filter(this.cType);
+                }.bind(this), 200);
+            },
+
+            filter : function(type) {
+                if( !this.user ) return;
+                if( !this.showing ) return;
+                if( this.ds.games.length == 0 ) return;
+
+                this.cType = type;
+
+                this.clearActiveBtn();
+                var ele = this.shadowRoot.querySelector('a.btn-default[filter="'+type+'"]');
+                if( ele ) ele.classList.add('active');
+
+                // set text
+                if( type == '*' ) {
+                    this.$.filterText.innerText = 'All Games';
+                } else if ( type == 'waiting' ) {
+                    this.$.filterText.innerText = 'Waiting for others to join';
+                } else if ( type == 'started' ) {
+                    this.$.filterText.innerText = 'Active Games';
+                } else if ( type == 'waitingToStart' ) {
+                    this.$.filterText.innerText = 'Someone just needs to hit the start button';
+                } else if ( type == 'needsApproval' ) {
+                    this.$.filterText.innerText = 'Waiting for you to join';
+                } else if ( type == 'empty' ) {
+                    this.$.filterText.innerText = 'No players have been added';
+                }
+
+
+                var layoutMode = 'masonry';
+                var iso = $(this.$.cards);
+
+                if( this.init ){
+                    var isoEles = iso.isotope('getItemElements');
+                    var allEles = this.shadowRoot.querySelectorAll('sb-game-overview');
+                    for( var i = 0; i < allEles.length; i++ ) {
+                        if( isoEles.indexOf(allEles[i]) == -1 ) {
+                            iso.isotope( 'appended', allEles[i] );
+                        }
+                    }
+                }
+                
+
+                if( type == '*') {
+                    iso.isotope({ 
+                        filter: '*',
+                        layoutMode: layoutMode,
+                        masonry: {
+                          columnWidth: 425
+                        }           
+                    });
+                } else {
+                    iso.isotope({ 
+                        filter: 'sb-game-overview[type="'+type+'"]', 
+                        layoutMode: layoutMode,
+                        masonry: {
+                          columnWidth: 425
+                        }
+                    });
+                }
+                this.init = true;
+            }
+            
+
+        });
+    </script>
+</polymer-element>

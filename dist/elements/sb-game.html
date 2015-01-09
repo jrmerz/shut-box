@@ -1,0 +1,431 @@
+<polymer-element name="sb-game">
+    <template>
+        <style>
+            td[active] {
+                font-weight: bold;
+            }
+        </style>
+
+        <template bind if="{{state == 'play'}}">
+            <a href="{{hack}}#home">Home</a>
+            <div style="text-align:center">
+                <h2 hidden?="{{currentPlayer.username == user.username}}">Turn: {{currentPlayer.username}}</h2>
+                <h2 hidden?="{{currentPlayer.username != user.username}}" style="color:green">Your Turn</h2>
+
+                <div>
+                    <template repeat="{{card, i in cards}}">
+                        <sb-flipper 
+                            index="{{i}}"
+                            active?="{{card.active}}" 
+                            selected?="{{card.selected}}"
+                            open?="{{!card.selected && !card.active}}"
+                            on-tap="{{select}}">
+                            {{card.value}}
+                        </div>
+                    </template>
+                </div>
+
+                <button on-click="{{setMove}}" class="btn btn-default">Set Move</button>
+
+                <div style="margin: 20px 0">
+                    <sb-dice id="d1" style="margin-right: 35px"></sb-dice>
+                    <sb-dice id="d2"></sb-dice>
+                </div>
+
+                <table style="width: 250px; margin: auto" class="table">
+                    <tr>
+                        <td></td>
+                        <td>Player</td>
+                        <td>Score</td>
+                    </tr>
+                    <tr template repeat="{{info in score}}">
+                        <td>
+                            <span hidden?="{{!info.connected}}" style="color:green">Online</span>
+                            <span hidden?="{{info.connected}}" style="color:#888">Offline</span>
+                        </td>
+                        <td active?="{{currentPlayer.username == info.name}}">{{info.name}}</td>
+                        <td>{{info.score}}</td>
+                    </tr>
+                </table>
+            </div>
+
+        </template>
+    </template>
+    <script>
+        Polymer('sb-game', {
+            hack : '',
+            initd : false,
+            state : 'background',
+            game : {},
+            data : {},
+            score : [],
+            cards : [],
+            currentPlayer : '',
+
+            // web socket
+            socket : null,
+
+            // alerts
+            toast : null,
+
+            user : null,
+
+            // array of usernames of connected players
+            connected : [],
+
+            observe : {
+                'data.turn.index' : 'updateTurn',
+                'data.turn.roll' : 'roll',
+                'state' : 'onStateChange'
+            },
+
+            ready : function() {
+                this.socket = document.querySelector('sb-socket');
+                this.toast = document.querySelector('sb-toast');
+
+                document.querySelector('sb-user').onUserLoad(function(user){
+                    this.user = user;
+                }.bind(this));
+            },
+
+            create : function(user, options) {
+                this.game = new SB.game(user, options);
+                this.data = this.game.getData();
+
+                this.socket.subscribe(this.data.id, this.handleRemoteEvent.bind(this));
+
+                this.initHandlers();
+                this.setState(true);
+            },
+
+            addPlayer : function(player) {
+                this.game.addPlayer(player);
+            },
+
+            setData : function(gameData) {
+                this.game = new SB.game();
+                
+                this.game.setData(gameData, true);
+                this.data = gameData;
+
+                this.socket.subscribe(this.data.id, this.handleRemoteEvent.bind(this));
+
+                this.initHandlers();
+                this.setState(true);
+            },
+
+            handleRemoteEvent : function(event, data) {
+                if( this.handlers[event] ) {
+                    this.handlers[event].call(this, data);
+                } else {
+                    console.log('Not Handling Remote Event: '+event);
+                    console.log(data);
+                }
+            },
+
+            handlers : {
+                subscribed : function(data) {
+                    this.connected = data.users;
+                    this.setState(false);
+                },
+                unsubscribed : function(data) {
+                    this.connected = data.users;
+                    this.setState(false);
+                },
+                'button-state-update' : function(data) {
+                    for( var i = 0; i < data.cards.length; i++ ) {
+                        for( var j = 0; j < this.cards.length; j++ ) {
+                            if( data.cards[i].value == this.cards[j].value ) {
+                                this.cards[j].selected = data.cards[i].selected;
+                                this.cards[j].active = data.cards[i].active;
+                                break;
+                            }
+                        }
+                    }
+                },
+                roll : function(data) {
+                    this.roll();
+                },
+                'game-update' : function(data) {
+                    this.game.setData(data);
+                    this.fire('remote-update');
+                }
+            },
+
+            _swapArray : function(arr, newArr) {
+                arr.splice(0, arr.length-1);
+                for( var i = 0; i < newArr.length; i++ ) {
+                    arr.push(newArr[i]);
+                }
+            },
+
+            getData : function() {
+                 return this.data;
+            },
+
+            start : function() {
+                this.game.start();
+            },
+
+            join : function(player) {
+                this.game.join(player);
+            },
+
+            initHandlers : function() {
+                this.game.on('data-update', function(data){
+                    this.fire('data-update', data);
+                    this.save();
+                }.bind(this));
+
+                this.game.on('finished', function(winner){
+                    // todo: set winner state
+                    this.fire('finished', winner);
+                    this.save();
+                }.bind(this));
+
+                this.game.on('button-state-update', function(btns){
+                    this.sendCards();
+                }.bind(this));
+
+                this.game.on('roll', function(){
+                    this.fire('roll');
+                    this.socket.emit('roll', {game: this.data.id});
+                }.bind(this));
+
+                this.async(function(){
+                    this.initd = true;
+                });
+            },
+
+            onStateChange : function() {
+                this.async(function(){
+                    this.setState(true);
+                });  
+            },
+
+            setState : function(resetCards) {
+                if( this.state != 'play' ) return;
+
+                if( resetCards ) this.updateCards();
+                this.updateScore();
+
+                this.currentPlayer = this.data.turn.player;
+
+                // make sure dice are correct
+                // perhaos this should be a flag
+                if( this.shadowRoot.querySelector('#d1') ) {
+                    this.shadowRoot.querySelector('#d1').setValue(this.data.turn.dice1);
+                    this.shadowRoot.querySelector('#d2').setValue(this.data.turn.dice2);
+                }
+                
+            },
+
+            save : function(){
+                $.ajax({
+                    type : 'POST',
+                    url  : '/rest/saveGame?socket='+this.socket.id,
+                    data : {game: JSON.stringify(this.data)},
+                    success : function() {
+            
+                    }.bind(this),
+                    error : function() {
+
+                    }
+                });
+            },
+
+            updateTurn : function() {
+                if( !this.initd ) return;
+                
+                if( this.data.round == 0 && this.data.turn.index == 0 ) {
+                    this.updateCards();
+                    this.updateScore();
+                    this.currentPlayer = this.data.turn.player;
+                    this.toast.addMessage('Game Started!');
+                } 
+
+                this.async(function(){
+                    if( this.state == 'play' ) {
+                        this.shadowRoot.querySelector('#d1').roll();
+                        this.shadowRoot.querySelector('#d2').roll();
+                    }
+
+                    setTimeout(function(){
+                        this.afterRoll(true);
+                    }.bind(this), 2000);
+                });
+
+            },
+
+            roll : function() {
+                if( !this.initd ) return;
+                if( this.data.turn.roll == 0 ) return;
+
+                this.async(function(){
+                    if( this.state == 'play' ) {
+                        this.shadowRoot.querySelector('#d1').roll();
+                        this.shadowRoot.querySelector('#d2').roll();
+                    }
+
+                    setTimeout(this.afterRoll.bind(this), 2000);
+                });
+            },
+
+            afterRoll : function(turnEnded) {
+                if( (this.data.round != 0 || this.data.turn.index != 0) && turnEnded) {
+                    var lastPlayer = this.data.turn.index - 1;
+                    if( lastPlayer < 0 ) lastPlayer = this.data.players.length - 1;
+
+                    var scores = this.data.scores[lastPlayer];
+                    this.toast.addMessage(
+                        'Turn Over. '+this.data.players[lastPlayer].username+' scored '+scores[scores.length-1]
+                    );
+
+                    if( this.state == 'play' ) {
+                        this.shadowRoot.querySelector('#d1').setValue(this.data.last.dice1);
+                        this.shadowRoot.querySelector('#d2').setValue(this.data.last.dice2);
+                    }
+                    
+                    this.updateScore();
+                    
+                    // animate switch turn
+                    setTimeout(function(){
+                        this.updateCards();
+                        this.currentPlayer = this.data.turn.player;
+
+                        if( this.state == 'play' ) {
+                            this.shadowRoot.querySelector('#d1').roll();
+                            this.shadowRoot.querySelector('#d2').roll();
+                        
+
+                            setTimeout(function(){
+                                this.shadowRoot.querySelector('#d1').setValue(this.data.turn.dice1);
+                                this.shadowRoot.querySelector('#d2').setValue(this.data.turn.dice2);
+                            }.bind(this), 2000);
+                        }
+                    }.bind(this), 3000);
+                    
+                } else {
+                    if( this.state == 'play' ) {
+                        this.shadowRoot.querySelector('#d1').setValue(this.data.turn.dice1);
+                        this.shadowRoot.querySelector('#d2').setValue(this.data.turn.dice2);
+                    }
+                }
+            },
+
+            updateScore : function() {
+                this.score = [];
+                for( var i = 0; i < this.data.players.length; i++ ) {
+                    this.score.push({
+                        name: this.data.players[i].username, 
+                        score: 0,
+                        connected: this.connected.indexOf(this.data.players[i].username) > -1 ? true : false
+                    });
+
+                    if( this.data.scores.length > i ) {
+                        for( var j = 0; j < this.data.scores[i].length; j++ ) {
+                            this.score[i].score += this.data.scores[i][j];
+                        } 
+                    }
+                }
+            },
+
+            updateCards : function() {
+                this.cards = [];
+                for( var i = 0; i < this.data.active.length; i++ ) {
+                    this.cards.push({
+                        value : this.data.active[i],
+                        active : true
+                    });
+                }
+
+                for( var i = 0; i < this.data.inactive.length; i++ ) {
+                    this.cards.push({
+                        value : this.data.inactive[i],
+                        active : false
+                    });
+                }
+
+                this.cards.sort(function(a, b){
+                    if( a.value > b.value ) return 1;
+                    if( a.value < b.value ) return -1;
+                    return 0;
+                });
+            },
+
+            select : function(e) {
+                if( !this.yourTurn() ) {
+                    this.toast.addMessage('It is not your turn');
+                    return;
+                }
+
+                var i = parseInt(e.currentTarget.getAttribute('index'));
+                if( this.cards[i].active ) return;
+
+                if( this.cards[i].selected ) {
+                    this.cards[i].selected = false;
+                    this.sendCards();
+                    return;
+                }
+
+                var sCount = 0;
+                for( var j = 0; j < this.cards.length; j++ ) {
+                    if( this.cards[j].selected ) {
+                        sCount++;
+                        if( sCount > 1 ) this.cards[j].selected = false;
+                    }
+                }
+
+                this.cards[i].selected = true;
+                this.sendCards();  
+            },
+
+            yourTurn : function() {
+                if( this.currentPlayer.username == this.user.username ) return true;
+                return false;
+            },
+
+            sendCards : function() {
+                var cards = $.extend(true, [], this.cards);
+
+                this.socket.emit('button-state-update', {
+                    game : this.data.id,
+                    cards : cards
+                });
+            },
+
+            setMove : function() {
+                if( !this.yourTurn() ) {
+                    this.toast.addMessage('It is not your turn');
+                    return;
+                }
+
+                var val1 = -1, val2;
+                for( var i = 0; i < this.cards.length; i++ ) {
+                    if( this.cards[i].selected ) {
+                        if( val1 == -1 ) val1 = this.cards[i].value;
+                        else val2 = this.cards[i].value;
+                    }
+                }
+
+                var cTurn = this.data.turn.index;
+
+                var valid = this.game.setMove(val1, val2);
+                if( !valid ) this.toast.addMessage('Invalid Move');
+                else if( cTurn == this.data.turn.index ) this.updateCards();
+                else {
+                    // show last move before we crap out
+                    for( var i = 0; i < this.cards.length; i++ ) {
+                        if( this.cards[i].selected ) {
+                            this.cards[i].selected = false;
+                            this.cards[i].active = true;
+                        }
+                    }
+                }
+
+                this.sendCards();
+            }
+
+        });
+    </script>
+</polymer-element>

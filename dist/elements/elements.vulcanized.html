@@ -1,0 +1,359 @@
+<div hidden><!--
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<!--
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<style shim-shadowdom="">html /deep/ [layout][horizontal],html /deep/ [layout][vertical]{display:-ms-flexbox;display:-webkit-flex;display:flex}html /deep/ [layout][horizontal][inline],html /deep/ [layout][vertical][inline]{display:-ms-inline-flexbox;display:-webkit-inline-flex;display:inline-flex}html /deep/ [layout][horizontal]{-ms-flex-direction:row;-webkit-flex-direction:row;flex-direction:row}html /deep/ [layout][horizontal][reverse]{-ms-flex-direction:row-reverse;-webkit-flex-direction:row-reverse;flex-direction:row-reverse}html /deep/ [layout][vertical]{-ms-flex-direction:column;-webkit-flex-direction:column;flex-direction:column}html /deep/ [layout][vertical][reverse]{-ms-flex-direction:column-reverse;-webkit-flex-direction:column-reverse;flex-direction:column-reverse}html /deep/ [layout][wrap]{-ms-flex-wrap:wrap;-webkit-flex-wrap:wrap;flex-wrap:wrap}html /deep/ [layout][wrap-reverse]{-ms-flex-wrap:wrap-reverse;-webkit-flex-wrap:wrap-reverse;flex-wrap:wrap-reverse}html /deep/ [flex]{-ms-flex:1 1 0;-webkit-flex:1;flex:1;-webkit-flex-basis:0;flex-basis:0}html /deep/ [vertical][layout]>[flex][auto-vertical],html /deep/ [vertical][layout]::shadow [flex][auto-vertical]{-ms-flex:1 1 auto;-webkit-flex-basis:auto;flex-basis:auto}html /deep/ [flex][auto]{-ms-flex:1 1 auto;-webkit-flex-basis:auto;flex-basis:auto}html /deep/ [flex][none]{-ms-flex:none;-webkit-flex:none;flex:none}html /deep/ [flex][one]{-ms-flex:1;-webkit-flex:1;flex:1}html /deep/ [flex][two]{-ms-flex:2;-webkit-flex:2;flex:2}html /deep/ [flex][three]{-ms-flex:3;-webkit-flex:3;flex:3}html /deep/ [flex][four]{-ms-flex:4;-webkit-flex:4;flex:4}html /deep/ [flex][five]{-ms-flex:5;-webkit-flex:5;flex:5}html /deep/ [flex][six]{-ms-flex:6;-webkit-flex:6;flex:6}html /deep/ [flex][seven]{-ms-flex:7;-webkit-flex:7;flex:7}html /deep/ [flex][eight]{-ms-flex:8;-webkit-flex:8;flex:8}html /deep/ [flex][nine]{-ms-flex:9;-webkit-flex:9;flex:9}html /deep/ [flex][ten]{-ms-flex:10;-webkit-flex:10;flex:10}html /deep/ [flex][eleven]{-ms-flex:11;-webkit-flex:11;flex:11}html /deep/ [flex][twelve]{-ms-flex:12;-webkit-flex:12;flex:12}html /deep/ [layout][start]{-ms-flex-align:start;-webkit-align-items:flex-start;align-items:flex-start}html /deep/ [layout][center],html /deep/ [layout][center-center]{-ms-flex-align:center;-webkit-align-items:center;align-items:center}html /deep/ [layout][end]{-ms-flex-align:end;-webkit-align-items:flex-end;align-items:flex-end}html /deep/ [layout][start-justified]{-ms-flex-pack:start;-webkit-justify-content:flex-start;justify-content:flex-start}html /deep/ [layout][center-justified],html /deep/ [layout][center-center]{-ms-flex-pack:center;-webkit-justify-content:center;justify-content:center}html /deep/ [layout][end-justified]{-ms-flex-pack:end;-webkit-justify-content:flex-end;justify-content:flex-end}html /deep/ [layout][around-justified]{-ms-flex-pack:distribute;-webkit-justify-content:space-around;justify-content:space-around}html /deep/ [layout][justified]{-ms-flex-pack:justify;-webkit-justify-content:space-between;justify-content:space-between}html /deep/ [self-start]{-ms-align-self:flex-start;-webkit-align-self:flex-start;align-self:flex-start}html /deep/ [self-center]{-ms-align-self:center;-webkit-align-self:center;align-self:center}html /deep/ [self-end]{-ms-align-self:flex-end;-webkit-align-self:flex-end;align-self:flex-end}html /deep/ [self-stretch]{-ms-align-self:stretch;-webkit-align-self:stretch;align-self:stretch}html /deep/ [block]{display:block}html /deep/ [hidden]{display:none!important}html /deep/ [relative]{position:relative}html /deep/ [fit]{position:absolute;top:0;right:0;bottom:0;left:0}body[fullbleed]{margin:0;height:100vh}html /deep/ [segment],html /deep/ segment{display:block;position:relative;-webkit-box-sizing:border-box;-ms-box-sizing:border-box;box-sizing:border-box;margin:1em .5em;padding:1em;background-color:#fff;-webkit-box-shadow:0 0 0 1px rgba(0,0,0,.1);box-shadow:0 0 0 1px rgba(0,0,0,.1);border-radius:5px}</style>
+
+<script src="../bower_components/polymer/polymer.js"></script>
+<!--<link rel="import" href="../polymer-dev/polymer.html">--> </div><div hidden><polymer-element name="sb-card" noscript="" assetpath="ui/">
+    <template>
+        <style>:host{background-color:#fff;display:block;margin:10px;padding:10px;box-shadow:0 4px 10px #ccc}</style>
+
+        <content></content>
+    </template>
+</polymer-element></div><div hidden><polymer-element name="sb-player-search" assetpath="ui/">
+    <template>
+        <style>:host{display:block}sb-player-search-btn{cursor:pointer}sb-player-search-btn:hover{background-color:#f8f8f8}</style>
+
+        <div layout="" horizontal="">
+            <div style="padding: 5px 15px 5px 0">Add Player</div>
+            <div>
+                <input type="text" value="{{playerSearch}}" class="form-control" placeholder="Enter name or username">
+            </div>
+        </div>
+
+        <div hidden?="{{results.length != 0 || loading || playerSearch.length &lt; 2}}">
+            No players matching your search
+        </div>
+
+        <div hidden?="{{!loading}}">Searching...</div>
+        
+        <template repeat="{{player in results}}">
+            <sb-player-search-btn player="{{player}}" on-click="{{onSelect}}">
+            </sb-player-search-btn>
+        </template>
+    </template>
+    <script>Polymer("sb-player-search",{results:[],playerSearch:"",loading:false,observe:{playerSearch:"search"},ready:function(){this.reset()},reset:function(){this.results=[];this.playerSearch="";this.loading=false},search:function(){if(this.playerSearch.length<2)return;this.loading=true;$.get("/rest/players?name="+this.playerSearch,this.onPlayerSearch.bind(this))},onPlayerSearch:function(resp){this.loading=false;this.results=resp},onSelect:function(e){this.fire("select",e.currentTarget.player);this.reset()}});</script>
+</polymer-element>
+
+<polymer-element name="sb-player-search-btn" attributes="player" noscript="" assetpath="ui/">
+    <template>
+        <style>:host{display:block}img{margin:5px;width:36px}</style>
+
+        <div layout="" horizontal="">
+            <div>
+                <img src="{{player.photo}}" class="img-rounded">
+            </div>
+            <div>
+                <div layout="" vertical="">
+                    <div>{{player.username}}</div>
+                    <div>{{player.name}}</div>
+                </div>
+            </div>
+        </div>
+    </template>
+</polymer-element></div><div hidden><polymer-element name="sb-popup" assetpath="">
+    <template>
+          <div class="modal fade">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+          </div><!-- /.modal -->
+    </template>
+    <script>Polymer("sb-popup",{ref:{popup:null,title:null,body:null},cBody:null,ready:function(){this.ref.popup=this.shadowRoot.querySelector(".modal");this.ref.title=this.shadowRoot.querySelector(".modal-title");this.ref.body=this.shadowRoot.querySelector(".modal-body");this.shadowRoot.removeChild(this.ref.popup);document.body.appendChild(this.ref.popup);$(this.ref.popup).modal({show:false})},show:function(){$(this.ref.popup).modal("show")},hide:function(){$(this.ref.popup).modal("hide")},set:function(title,body,show){if(this.cBody!=null)this.ref.body.removeChild(this.cBody);this.cBody=body;this.ref.title.innerHTML=title;this.ref.body.appendChild(body);if(show)this.show()}});</script>
+</polymer-element></div><div hidden><polymer-element name="sb-datastore" assetpath="">
+    <template></template>
+    <script>Polymer("sb-datastore",{games:[],observe:{games:"fireUpdate"},ready:function(){this.loadGames()},addGame:function(gameEle){this.games.push(gameEle)},deleteGame:function(gameId){for(var i=0;i<this.games.length;i++){if(this.games[i].data.id==gameId){this.games.splice(i,1);return}}},loadGame:function(gameId){$.get("/rest/game?id="+gameId,function(game){var gameEle=document.createElement("sb-game");gameEle.setData(game);this.games.push(gameEle)}.bind(this))},loadGames:function(){$.get("/rest/games",function(games){for(var i=0;i<games.length;i++){var gameEle=document.createElement("sb-game");gameEle.setData(games[i]);this.games.push(gameEle)}}.bind(this))},fireUpdate:function(){this.fire("update",this.games)}});</script>
+</polymer-element></div><div hidden><polymer-element name="sb-create-game" assetpath="">
+    <template>
+        <!--<div hidden?="{{state != 'init'}}">-->
+        <button on-click="{{create}}" class="btn btn-default">Create Game</button>
+        <!--</div>-->
+
+        <!--<div hidden?="{{state != 'creating'}}">
+            <sb-player-search on-select="{{addPlayer}}"></sb-player-search>            
+
+            <div><a href="game/{{data.id}}">Go to game</a></div>
+        </div>-->
+
+    </template>
+    <script>Polymer("sb-create-game",{state:"init",socket:null,game:null,ds:null,data:null,ready:function(){document.querySelector("sb-user").onUserLoad(function(user){this.user=user}.bind(this));this.ds=document.querySelector("sb-datastore");this.socket=document.querySelector("sb-socket")},create:function(){this.state="creating";var gameEle=document.createElement("sb-game");gameEle.create(this.user.username);this.data=gameEle.getData();this.ds.addGame(gameEle);this.game=gameEle;$.ajax({type:"POST",url:"/rest/saveGame?socket="+this.socket.id,data:{game:JSON.stringify(this.data)},success:function(){document.querySelector("sb-toast").addMessage("Game Create!");this.socket.emit("subscribe",{game:gameEle.data.id})}.bind(this),error:function(){}})},addPlayer:function(e){var player=e.detail;this.game.addPlayer(player)}});</script>
+</polymer-element></div><div hidden><polymer-element name="sb-game-overview" attributes="game" assetpath="">
+    <template>
+        <style>:host{display:inline-block;padding:10px;margin:10px;background-color:#fff;border:1px solid #ccc;width:400px;border-radius:6px}:host([type=started]){border:1px solid #398439;box-shadow:2px 2px 2px #398439}:host([type=waitingToStart]){border:1px solid #2e6da4;box-shadow:2px 2px 2px #2e6da4}:host([type=empty]){border:1px solid #888;box-shadow:2px 2px 2px #888}:host([type=waiting]){border:1px solid #eea236;box-shadow:2px 2px 2px #eea236}:host([type=needsApproval]){border:1px solid #d43f3a;box-shadow:2px 2px 2px #d43f3a}.add{padding:5px;margin:5px;box-shadow:0 0 4px #888 inset}.active{background-color:#5cb85c;color:#fff;padding:5px;margin:0 10px 10px 0;border-radius:6px}ul{margin:5px 0 0!important;list-style:none;padding:5px;background-color:#eee;border-radius:6px}ul li{margin:8px 0 0}</style>
+        
+        <div layout="" horizontal="">
+            <div flex="">
+
+                <div hidden?="{{state != &apos;started&apos;}}" class="active">
+                    <div class="started">Active</div>
+                    <div class="round">Round: {{game.data.round+1}}</div>
+                    <div class="round">Turn: <b>{{game.data.turn.player.username}}</b>, Roll: {{game.data.turn.roll+1}}</div>
+                </div>
+
+            </div>
+            <div>
+                <template bind="" if="{{state == &apos;needsApproval&apos;}}">
+                    <a class="btn btn-default" on-click="{{join}}">Join Game</a>
+                </template>
+
+                <template bind="" if="{{state == &apos;waitingToStart&apos;}}">
+                    <button class="btn btn-default" on-click="{{start}}">Start</button>
+                </template>
+                <template bind="" if="{{state == &apos;started&apos;}}">
+                    <a class="btn btn-default" href="#game/{{game.data.id}}">Go to Game</a>
+                </template>
+            </div>
+        </div>
+
+        <div hidden?="{{otherPlayers.length == 0}}">
+            <b>Other Players: </b><br>
+            <table class="table" style="margin-bottom:0">
+                <tr template="" repeat="{{player in otherPlayers}}">
+                    <td>
+                        <img src="{{player.photo}}" class="img-rounded" style="width:25px"> {{player.username}}
+                    </td>
+                    <td>
+                        <span hidden?="{{!player.joined}}">
+                            <span hidden?="{{!player.connected}}" style="color:green">Online</span>
+                            <span hidden?="{{player.connected}}" style="color:#888">Offline</span>
+                        </span>
+                        <span hidden?="{{player.joined}}" style="color:#888">Waiting to Join</span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div hidden?="{{state != &apos;empty&apos;}}">
+            Playing with yourself is no fun... why not add someone else?
+        </div>
+
+        <sb-player-search id="addPlayers"></sb-player-search>
+
+        <ul>
+            <li hidden?="{{state == &apos;started&apos; || state == &apos;needsApproval&apos;}}">
+                <a style="cursor:pointer" on-click="{{showPopup}}">Add Players</a>
+            </li>
+            <li hidden?="{{state == &apos;started&apos;}}">
+                <a style="cursor:pointer" on-click="{{delete}}">Delete Game</a>
+            </li>
+            <li>
+                Created: {{createdDate}}
+            </li>
+        <ul>
+    </ul></ul></template>
+    <script>Polymer("sb-game-overview",{user:null,game:null,createdDate:"",otherPlayers:[],self:{},showAdd:false,state:"",bindId:"",observe:{game:"onGameUpdated",user:"onPlayersUpdated","game.data.players":"onPlayersUpdated","game.connected":"onPlayersUpdated"},ready:function(){this.$.addPlayers.addEventListener("select",this.addPlayer.bind(this));$(this.$.addPlayers).remove();document.querySelector("sb-user").onUserLoad(function(user){this.user=user}.bind(this))},showPopup:function(){document.querySelector("sb-popup").set("Add Players",this.$.addPlayers,true)},updateState:function(){if(!this.user)return;this.removeAttribute("type");if(this.game.data.started){this.setAttribute("type","started");this.state="started"}else if(this.game.data.players.length<=1){this.setAttribute("type","empty");this.state="empty"}else if(this._needsApproval()){this.setAttribute("type","needsApproval");this.state="needsApproval"}else if(this._waitingToStart()){this.setAttribute("type","waitingToStart");this.state="waitingToStart"}else{this.setAttribute("type","waiting");this.state="waiting"}this.fire("state-updated")},_waitingToStart:function(){if(this.game.data.players.length<2)return false;if(this.game.data.started)return false;for(var i=0;i<this.game.data.players.length;i++){if(this.game.data.players[i].joined==false)return false}return true},_needsApproval:function(){for(var i=0;i<this.game.data.players.length;i++){if(this.game.data.players[i].joined==false&&this.game.data.players[i].username==this.user.username)return true}return false},onGameUpdated:function(){var d=new Date(this.game.data.created);this.createdDate=[d.getMonth()+1,d.getDate(),d.getYear()+1900].join("/");if(this.bindId==""){this.game.addEventListener("remote-update",this.onPlayersUpdated.bind(this));this.bindId=this.game.data.id}else if(this.bindId!=this.game.data.id){alert("Overview panel attempting to bind to second game!!")}this.updateState()},addPlayer:function(e){var player=e.detail;this.game.addPlayer(player)},onPlayersUpdated:function(){if(!this.user)return;if(!this.game.data.players)return;this.self={};this.otherPlayers=[];for(var i=0;i<this.game.data.players.length;i++){if(this.game.data.players[i].username!=this.user.username){this.addOtherPlayer(this.game.data.players[i])}else{this.self=this.game.data.players[i]}}this.updateState()},addOtherPlayer:function(player){var p=$.extend(true,{},player);if(this.game.connected.indexOf(p.username)>-1){p.connected=true}else{p.connected=false}this.otherPlayers.push(p)},join:function(){this.game.join(this.self);this.async(function(){this.updateState()})},toggleShow:function(){this.showAdd=!this.showAdd},start:function(){this.game.start();window.location="#game/"+this.game.data.id},"delete":function(){if(!confirm("Are you sure you want to delete this game?!"))return;$.get("/rest/deleteGame?id="+this.game.data.id,function(resp){if(resp.error)return alert("Server Error Deleting Game :(");document.querySelector("sb-datastore").deleteGame(this.game.data.id)}.bind(this))}});</script>
+</polymer-element></div><div hidden><polymer-element name="sb-router" attributes="defaultRoute" assetpath="">
+    <template>
+        <content></content>
+    </template>
+    <script>Polymer("sb-router",{defaultRoute:"",ready:function(){$(window).on("hashchange",this.setPage.bind(this));Polymer.whenPolymerReady(this.setPage.bind(this))},setPage:function(){var loc=window.location.hash.replace(/#/g,"").split("/");var routeSet=this.setLocation(loc[0]);if(!routeSet&&this.defaultRoute!=""){routeSet=this.setLocation(this.defaultRoute)}if(!routeSet&&this.children.length>0){this.show(this.children[0])}this.fire("page-change",loc)},setLocation:function(loc){var routeSet=false;for(var i=0;i<this.children.length;i++){if(this.children[i].getAttribute("route")==loc){this.show(this.children[i]);routeSet=true}else{this.children[i].style.display="none"}}return routeSet},show:function(child){child.style.display="block";if(child.onShow)child.onShow()}});</script>
+</polymer-element></div><div hidden><polymer-element name="sb-game" assetpath="">
+    <template>
+        <style>td[active]{font-weight:700}</style>
+
+        <template bind="" if="{{state == &apos;play&apos;}}">
+            <a href="{{hack}}#home">Home</a>
+            <div style="text-align:center">
+                <h2 hidden?="{{currentPlayer.username == user.username}}">Turn: {{currentPlayer.username}}</h2>
+                <h2 hidden?="{{currentPlayer.username != user.username}}" style="color:green">Your Turn</h2>
+
+                <div>
+                    <template repeat="{{card, i in cards}}">
+                        <sb-flipper index="{{i}}" active?="{{card.active}}" selected?="{{card.selected}}" open?="{{!card.selected &amp;&amp; !card.active}}" on-tap="{{select}}">
+                            {{card.value}}
+                        </sb-flipper></template></div>
+                    </div></template>
+                
+
+                <button on-click="{{setMove}}" class="btn btn-default">Set Move</button>
+
+                <div style="margin: 20px 0">
+                    <sb-dice id="d1" style="margin-right: 35px"></sb-dice>
+                    <sb-dice id="d2"></sb-dice>
+                </div>
+
+                <table style="width: 250px; margin: auto" class="table">
+                    <tr>
+                        <td></td>
+                        <td>Player</td>
+                        <td>Score</td>
+                    </tr>
+                    <tr template="" repeat="{{info in score}}">
+                        <td>
+                            <span hidden?="{{!info.connected}}" style="color:green">Online</span>
+                            <span hidden?="{{info.connected}}" style="color:#888">Offline</span>
+                        </td>
+                        <td active?="{{currentPlayer.username == info.name}}">{{info.name}}</td>
+                        <td>{{info.score}}</td>
+                    </tr>
+                </table>
+            
+
+        </template>
+    
+    <script>Polymer("sb-game",{hack:"",initd:false,state:"background",game:{},data:{},score:[],cards:[],currentPlayer:"",socket:null,toast:null,user:null,connected:[],observe:{"data.turn.index":"updateTurn","data.turn.roll":"roll",state:"onStateChange"},ready:function(){this.socket=document.querySelector("sb-socket");this.toast=document.querySelector("sb-toast");document.querySelector("sb-user").onUserLoad(function(user){this.user=user}.bind(this))},create:function(user,options){this.game=new SB.game(user,options);this.data=this.game.getData();this.socket.subscribe(this.data.id,this.handleRemoteEvent.bind(this));this.initHandlers();this.setState(true)},addPlayer:function(player){this.game.addPlayer(player)},setData:function(gameData){this.game=new SB.game;this.game.setData(gameData,true);this.data=gameData;this.socket.subscribe(this.data.id,this.handleRemoteEvent.bind(this));this.initHandlers();this.setState(true)},handleRemoteEvent:function(event,data){if(this.handlers[event]){this.handlers[event].call(this,data)}else{console.log("Not Handling Remote Event: "+event);console.log(data)}},handlers:{subscribed:function(data){this.connected=data.users;this.setState(false)},unsubscribed:function(data){this.connected=data.users;this.setState(false)},"button-state-update":function(data){for(var i=0;i<data.cards.length;i++){for(var j=0;j<this.cards.length;j++){if(data.cards[i].value==this.cards[j].value){this.cards[j].selected=data.cards[i].selected;this.cards[j].active=data.cards[i].active;break}}}},roll:function(data){this.roll()},"game-update":function(data){this.game.setData(data);this.fire("remote-update")}},_swapArray:function(arr,newArr){arr.splice(0,arr.length-1);for(var i=0;i<newArr.length;i++){arr.push(newArr[i])}},getData:function(){return this.data},start:function(){this.game.start()},join:function(player){this.game.join(player)},initHandlers:function(){this.game.on("data-update",function(data){this.fire("data-update",data);this.save()}.bind(this));this.game.on("finished",function(winner){this.fire("finished",winner);this.save()}.bind(this));this.game.on("button-state-update",function(btns){this.sendCards()}.bind(this));this.game.on("roll",function(){this.fire("roll");this.socket.emit("roll",{game:this.data.id})}.bind(this));this.async(function(){this.initd=true})},onStateChange:function(){this.async(function(){this.setState(true)})},setState:function(resetCards){if(this.state!="play")return;if(resetCards)this.updateCards();this.updateScore();this.currentPlayer=this.data.turn.player;if(this.shadowRoot.querySelector("#d1")){this.shadowRoot.querySelector("#d1").setValue(this.data.turn.dice1);this.shadowRoot.querySelector("#d2").setValue(this.data.turn.dice2)}},save:function(){$.ajax({type:"POST",url:"/rest/saveGame?socket="+this.socket.id,data:{game:JSON.stringify(this.data)},success:function(){}.bind(this),error:function(){}})},updateTurn:function(){if(!this.initd)return;if(this.data.round==0&&this.data.turn.index==0){this.updateCards();this.updateScore();this.currentPlayer=this.data.turn.player;this.toast.addMessage("Game Started!")}this.async(function(){if(this.state=="play"){this.shadowRoot.querySelector("#d1").roll();this.shadowRoot.querySelector("#d2").roll()}setTimeout(function(){this.afterRoll(true)}.bind(this),2e3)})},roll:function(){if(!this.initd)return;if(this.data.turn.roll==0)return;this.async(function(){if(this.state=="play"){this.shadowRoot.querySelector("#d1").roll();this.shadowRoot.querySelector("#d2").roll()}setTimeout(this.afterRoll.bind(this),2e3)})},afterRoll:function(turnEnded){if((this.data.round!=0||this.data.turn.index!=0)&&turnEnded){var lastPlayer=this.data.turn.index-1;if(lastPlayer<0)lastPlayer=this.data.players.length-1;var scores=this.data.scores[lastPlayer];this.toast.addMessage("Turn Over. "+this.data.players[lastPlayer].username+" scored "+scores[scores.length-1]);if(this.state=="play"){this.shadowRoot.querySelector("#d1").setValue(this.data.last.dice1);this.shadowRoot.querySelector("#d2").setValue(this.data.last.dice2)}this.updateScore();setTimeout(function(){this.updateCards();this.currentPlayer=this.data.turn.player;if(this.state=="play"){this.shadowRoot.querySelector("#d1").roll();this.shadowRoot.querySelector("#d2").roll();setTimeout(function(){this.shadowRoot.querySelector("#d1").setValue(this.data.turn.dice1);this.shadowRoot.querySelector("#d2").setValue(this.data.turn.dice2)}.bind(this),2e3)}}.bind(this),3e3)}else{if(this.state=="play"){this.shadowRoot.querySelector("#d1").setValue(this.data.turn.dice1);this.shadowRoot.querySelector("#d2").setValue(this.data.turn.dice2)}}},updateScore:function(){this.score=[];for(var i=0;i<this.data.players.length;i++){this.score.push({name:this.data.players[i].username,score:0,connected:this.connected.indexOf(this.data.players[i].username)>-1?true:false});if(this.data.scores.length>i){for(var j=0;j<this.data.scores[i].length;j++){this.score[i].score+=this.data.scores[i][j]}}}},updateCards:function(){this.cards=[];for(var i=0;i<this.data.active.length;i++){this.cards.push({value:this.data.active[i],active:true})}for(var i=0;i<this.data.inactive.length;i++){this.cards.push({value:this.data.inactive[i],active:false})}this.cards.sort(function(a,b){if(a.value>b.value)return 1;if(a.value<b.value)return-1;return 0})},select:function(e){if(!this.yourTurn()){this.toast.addMessage("It is not your turn");return}var i=parseInt(e.currentTarget.getAttribute("index"));if(this.cards[i].active)return;if(this.cards[i].selected){this.cards[i].selected=false;this.sendCards();return}var sCount=0;for(var j=0;j<this.cards.length;j++){if(this.cards[j].selected){sCount++;if(sCount>1)this.cards[j].selected=false}}this.cards[i].selected=true;this.sendCards()},yourTurn:function(){if(this.currentPlayer.username==this.user.username)return true;return false},sendCards:function(){var cards=$.extend(true,[],this.cards);this.socket.emit("button-state-update",{game:this.data.id,cards:cards})},setMove:function(){if(!this.yourTurn()){this.toast.addMessage("It is not your turn");return}var val1=-1,val2;for(var i=0;i<this.cards.length;i++){if(this.cards[i].selected){if(val1==-1)val1=this.cards[i].value;else val2=this.cards[i].value}}var cTurn=this.data.turn.index;var valid=this.game.setMove(val1,val2);if(!valid)this.toast.addMessage("Invalid Move");else if(cTurn==this.data.turn.index)this.updateCards();else{for(var i=0;i<this.cards.length;i++){if(this.cards[i].selected){this.cards[i].selected=false;this.cards[i].active=true}}}this.sendCards()}});</script>
+</polymer-element></div><div hidden><polymer-element name="sb-toast" assetpath="">
+    <template>
+        <style>:host{padding:20px;margin:15px;border-radius:6px;background-color:rgba(0,0,0,.85);color:#fff;position:absolute;left:0;bottom:0;transition:all 250ms ease-out;opacity:0;transform:translateY(150px);-webkit-transform:translateY(150px);-moz-transform:translateY(150px)}:host(.open){opacity:1;transform:translateY(0px);-webkit-transform:translateY(0px);-moz-transform:translateY(0px)}</style>
+
+        <template repeat="{{msg in messages}}">
+            <div>{{msg}}</div>
+        </template>
+        
+    </template>
+    <script>Polymer("sb-toast",{messages:[],addMessage:function(msg){this.messages.push(msg);this.async(function(){this.show();setTimeout(this.pop.bind(this),3e3)})},pop:function(){this.checkHide();setTimeout(function(){this.messages.splice(0,1);this.checkHide()}.bind(this),250)},checkHide:function(){if(this.messages.length<=1){this.hide()}},show:function(){this.classList.add("open")},hide:function(){this.classList.remove("open")}});</script>
+</polymer-element></div><div hidden><polymer-element name="sb-flipper" attributes="open selected active" assetpath="">
+    <template>
+        <style>:host{display:inline-block;margin:10px}.flipper{background-color:#fff;display:inline-block;border:1px solid #888;padding:30px 20px;border-radius:6px;transition:all 150ms ease-out;-webkit-transition:all 150ms ease-out;-moz-transition:all 150ms ease-out;-ms-transition:all 150ms ease-out}.flipper[open]{transform:rotateX(-5deg) translate3d(-10px,-10px,0);-webkit-transform:rotateX(-5deg) translate3d(-10px,-10px,0);-moz-transform:translate3d(-10px,-10px,0);-ms-transform:translate3d(-10px,-10px,0);box-shadow:10px 10px 10px #ccc}.flipper[selected]{box-shadow:1px 1px 2px green;border:1px solid green;color:green}.flipper[active]{color:#888;box-shadow:0 0 5px #ccc inset;border:1px solid #ccc}.shadow{height:75px;width:50px;background-color:#ccc;border-radius:6px;box-shadow:10px;position:absolute}</style>
+        <!--<div style="position:relative">
+            <div class="shadow" hidden?="{{!open}}"></div>
+        </div>-->
+        <div class="flipper" open?="{{open}}" selected?="{{selected}}" active?="{{active}}">
+            <content></content>
+        </div>
+        
+    </template>
+    <script>Polymer("sb-flipper",{open:false,selected:false,active:false});</script>
+</polymer-element>
+
+</div><div hidden><polymer-element name="sb-dice" assetpath="">
+  <template>
+    <style>:host{height:100px;display:inline-block}figure{border-radius:5px}.container-shapeD6{width:100px;height:100px;position:relative;margin:0 auto;border:1px none #CCC;-webkit-perspective:1000px;-moz-perspective:1000px;-ms-perspective:1000px;-o-perspective:1000px;perspective:1000px;pointer-events:none}#shapeD6{width:100%;height:100%;position:absolute;-webkit-transform-style:preserve-3d;-moz-transform-style:preserve-3d;-ms-transform-style:preserve-3d;-o-transform-style:preserve-3d;transform-style:preserve-3d;-webkit-transition:-webkit-transform 500ms;-moz-transition:-moz-transform 500ms;-o-transition:-o-transform 500ms;transition:transform 500ms}#shapeD6 figure{display:block;position:absolute;width:96px;height:96px;border:2px solid #fff;line-height:96px;font-size:60px;font-weight:700;color:#fff;text-align:center;margin:0}#shapeD6.panels-backface-invisible figure{-webkit-backface-visibility:hidden;-moz-backface-visibility:hidden;-ms-backface-visibility:hidden;-o-backface-visibility:hidden;backface-visibility:hidden}#shapeD6 .side1{background:hsla(0,100%,40%,.8)}#shapeD6 .side2{background:hsla(0,100%,40%,.8)}#shapeD6 .side3{background:hsla(0,100%,40%,.8)}#shapeD6 .side4{background:hsla(0,100%,40%,.8)}#shapeD6 .side5{background:hsla(0,100%,40%,.8)}#shapeD6 .side6{background:hsla(0,100%,40%,.8)}#shapeD6 .side1{-webkit-transform:translateZ(50px);-moz-transform:translateZ(50px);-ms-transform:translateZ(50px);-o-transform:translateZ(50px);transform:translateZ(50px)}#shapeD6 .side2{-webkit-transform:rotateX(-180deg) translateZ(50px);-moz-transform:rotateX(-180deg) translateZ(50px);-ms-transform:rotateX(-180deg) translateZ(50px);-o-transform:rotateX(-180deg) translateZ(50px);transform:rotateX(-180deg) translateZ(50px)}#shapeD6 .side3{-webkit-transform:rotateY(90deg) translateZ(50px);-moz-transform:rotateY(90deg) translateZ(50px);-ms-transform:rotateY(90deg) translateZ(50px);-o-transform:rotateY(90deg) translateZ(50px);transform:rotateY(90deg) translateZ(50px)}#shapeD6 .side4{-webkit-transform:rotateY(-90deg) translateZ(50px);-moz-transform:rotateY(-90deg) translateZ(50px);-ms-transform:rotateY(-90deg) translateZ(50px);-o-transform:rotateY(-90deg) translateZ(50px);transform:rotateY(-90deg) translateZ(50px)}#shapeD6 .side5{-webkit-transform:rotateX(90deg) translateZ(50px);-moz-transform:rotateX(90deg) translateZ(50px);-ms-transform:rotateX(90deg) translateZ(50px);-o-transform:rotateX(90deg) translateZ(50px);transform:rotateX(90deg) translateZ(50px)}#shapeD6 .side6{-webkit-transform:rotateX(-90deg) translateZ(50px);-moz-transform:rotateX(-90deg) translateZ(50px);-ms-transform:rotateX(-90deg) translateZ(50px);-o-transform:rotateX(-90deg) translateZ(50px);transform:rotateX(-90deg) translateZ(50px)}#shapeD6.show-side1{-webkit-transform:translateZ(-100px);-moz-transform:translateZ(-100px);-ms-transform:translateZ(-100px);-o-transform:translateZ(-100px);transform:translateZ(-100px)}#shapeD6.show-side2{-webkit-transform:translateZ(-100px) rotateX(-180deg);-moz-transform:translateZ(-100px) rotateX(-180deg);-ms-transform:translateZ(-100px) rotateX(-180deg);-o-transform:translateZ(-100px) rotateX(-180deg);transform:translateZ(-100px) rotateX(-180deg)}#shapeD6.show-side3{-webkit-transform:translateZ(-100px) rotateY(-90deg);-moz-transform:translateZ(-100px) rotateY(-90deg);-ms-transform:translateZ(-100px) rotateY(-90deg);-o-transform:translateZ(-100px) rotateY(-90deg);transform:translateZ(-100px) rotateY(-90deg)}#shapeD6.show-side4{-webkit-transform:translateZ(-100px) rotateY(90deg);-moz-transform:translateZ(-100px) rotateY(90deg);-ms-transform:translateZ(-100px) rotateY(90deg);-o-transform:translateZ(-100px) rotateY(90deg);transform:translateZ(-100px) rotateY(90deg)}#shapeD6.show-side5{-webkit-transform:translateZ(-100px) rotateX(-90deg);-moz-transform:translateZ(-100px) rotateX(-90deg);-ms-transform:translateZ(-100px) rotateX(-90deg);-o-transform:translateZ(-100px) rotateX(-90deg);transform:translateZ(-100px) rotateX(-90deg)}#shapeD6.show-side6{-webkit-transform:translateZ(-100px) rotateX(90deg);-moz-transform:translateZ(-100px) rotateX(90deg);-ms-transform:translateZ(-100px) rotateX(90deg);-o-transform:translateZ(-100px) rotateX(90deg);transform:translateZ(-100px) rotateX(90deg)}.container-shapeD6{width:100px;height:100px;position:relative;margin:0 auto;border:1px none #CCC;-webkit-perspective:1000px;-moz-perspective:1000px;-ms-perspective:1000px;-o-perspective:1000px;perspective:1000px;pointer-events:none}</style>
+
+    <div class="container-shapeD6">
+      <div id="shapeD6" class="show-side2">
+        <figure class="side1">1</figure>
+        <figure class="side2">2</figure>
+        <figure class="side3">3</figure>
+        <figure class="side4">4</figure>
+        <figure class="side5">5</figure>
+        <figure class="side6">6</figure>
+      </div>
+    </div>
+  </template>
+  <script>Polymer("sb-dice",{interval:-1,rand:-1,roll:function(){this.clear();this.interval=setInterval(function(){if(this.rand!=-1)this.$.shapeD6.classList.remove("show-side"+this.rand);var rand=SB.dice.roll();while(rand==this.rand)rand=SB.dice.roll();this.rand=rand;this.$.shapeD6.classList.add("show-side"+this.rand)}.bind(this),350)},setValue:function(val){this.clear();this.$.shapeD6.classList.add("show-side"+val)},clear:function(){if(this.interval!=-1)clearInterval(this.interval);for(var i=1;i<=6;i++){this.$.shapeD6.classList.remove("show-side"+i)}}});</script>
+</polymer-element></div><div hidden><polymer-element name="sb-user" assetpath="">
+    <template>
+        <h4>Welcome, {{data.username}}</h4>
+
+    </template>
+    <script>Polymer("sb-user",{data:null,listeners:[],ready:function(){$.get("/rest/user",function(resp){this.data=resp;for(var i=0;i<this.listeners.length;i++){this.listeners[i](this.data)}this.listeners=[]}.bind(this))},onUserLoad:function(fn){if(this.data!=null)fn(this.data);else this.listeners.push(fn)}});</script>
+</polymer-element></div><div hidden><polymer-element name="sb-home" assetpath="">
+    <template>
+        <style>a[filter=started]{color:#398439!important}a[filter=waitingToStart]{color:#2e6da4!important}a[filter=empty]{color:#888!important}a[filter=waiting]{color:#eea236!important}a[filter=needsApproval]{color:#d43f3a!important}</style>
+
+        <sb-card>
+            <sb-create-game id="create"></sb-create-game>
+        </sb-card>
+
+        <sb-card>
+            <div layout="" horizontal="">
+                <div class="btn-group" role="group">
+                    <a class="btn btn-default active" on-click="{{onFilterBtn}}" filter="*">All</a>
+                    <a class="btn btn-default" on-click="{{onFilterBtn}}" filter="started">Started</a>
+                    <a class="btn btn-default" on-click="{{onFilterBtn}}" filter="waitingToStart">Ready to Start</a>
+                    <a class="btn btn-default" on-click="{{onFilterBtn}}" filter="empty">Empty</a>
+                    <a class="btn btn-default" on-click="{{onFilterBtn}}" filter="waiting">Waiting on Others</a>
+                    <a class="btn btn-default" on-click="{{onFilterBtn}}" filter="needsApproval">Waiting on You</a>
+                    
+                </div>
+                <div flex="">
+                    <h4 style="text-align:right" id="filterText">All Games</h4>
+                </div>
+            </div>
+
+            <div id="cards">
+                <template repeat="{{game in ds.games}}">
+                    <sb-game-overview game="{{game}}" on-state-updated="{{_delayUpdate}}"></sb-game-overview>
+                </template>
+            </div>
+        </sb-card>
+
+        <!--<template bind if="{{games.emptyGames.length > 0}}">
+            <sb-card>
+                <h4>Game Created, no invite players...</h4>
+                <template repeat="{{game in games.emptyGames}}">
+                    <sb-game-overview game="{{game}}"></sb-game-overview>
+                </template>
+            </sb-card>
+        </template>
+
+        <template bind if="{{games.active.length > 0}}">
+            <sb-card>
+                <h4>Active Games</h4>
+                <template repeat="{{game in games.active}}">
+                    <sb-game-overview game="{{game}}"></sb-game-overview>
+                </template>
+            </sb-card>
+        </template>
+
+        
+
+        <template bind if="{{games.waitingToStart.length > 0}}">
+            <sb-card>
+                <h4>All Set, just hit Start</h4>
+                <template repeat="{{game in games.waitingToStart}}">
+                    <sb-game-overview game="{{game}}"></sb-game-overview>
+                </template>
+            </sb-card>
+        </template>
+
+        <template bind if="{{games.needsApproval.length > 0}}">
+            <sb-card>
+                <h4>Your Invited</h4>
+                <template repeat="{{game in games.needsApproval}}">
+                    <sb-game-overview game="{{game}}"></sb-game-overview>
+                </template>
+            </sb-card>
+        </template>
+
+        <template bind if="{{games.waiting.length > 0}}">
+            <sb-card>
+                <h4>Waiting for others to join</h4>
+                <template repeat="{{game in games.waiting}}">
+                    <sb-game-overview game="{{game}}"></sb-game-overview>
+                </template>
+            </sb-card>
+        </template>-->
+
+    </template>
+    <script>Polymer("sb-home",{user:null,ds:null,showing:false,init:false,updateTimer:-1,cType:"*",ready:function(){document.querySelector("sb-user").onUserLoad(function(user){this.user=user}.bind(this));this.ds=document.querySelector("sb-datastore");this.ds.addEventListener("update",function(e){if(!this.showing)return;this.async(function(){this.filter("*")})}.bind(this));document.querySelector("sb-socket").on("join-request",function(data){document.querySelector("sb-toast").addMessage("You have been invited to play a game with: "+data.users.join(", "));this.ds.loadGame(data.game)}.bind(this))},onShow:function(){this.showing=true;setTimeout(function(){this.filter("*")}.bind(this),200)},clearActiveBtn:function(){var ele=this.shadowRoot.querySelector("a.btn-default.active");if(ele)ele.classList.remove("active")},onFilterBtn:function(e){this.filter(e.currentTarget.getAttribute("filter"))},_delayUpdate:function(){if(this.updateTimer!=-1)clearTimeout(this.updateTimer);this.updateTimer=setTimeout(function(){this.updateTimer=-1;this.filter(this.cType)}.bind(this),200)},filter:function(type){if(!this.user)return;if(!this.showing)return;if(this.ds.games.length==0)return;this.cType=type;this.clearActiveBtn();var ele=this.shadowRoot.querySelector('a.btn-default[filter="'+type+'"]');if(ele)ele.classList.add("active");if(type=="*"){this.$.filterText.innerText="All Games"}else if(type=="waiting"){this.$.filterText.innerText="Waiting for others to join"}else if(type=="started"){this.$.filterText.innerText="Active Games"}else if(type=="waitingToStart"){this.$.filterText.innerText="Someone just needs to hit the start button"}else if(type=="needsApproval"){this.$.filterText.innerText="Waiting for you to join"}else if(type=="empty"){this.$.filterText.innerText="No players have been added"}var layoutMode="masonry";var iso=$(this.$.cards);if(this.init){var isoEles=iso.isotope("getItemElements");var allEles=this.shadowRoot.querySelectorAll("sb-game-overview");for(var i=0;i<allEles.length;i++){if(isoEles.indexOf(allEles[i])==-1){iso.isotope("appended",allEles[i])}}}if(type=="*"){iso.isotope({filter:"*",layoutMode:layoutMode,masonry:{columnWidth:425}})}else{iso.isotope({filter:'sb-game-overview[type="'+type+'"]',layoutMode:layoutMode,masonry:{columnWidth:425}})}this.init=true}});</script>
+</polymer-element></div><div hidden><script src="/socket.io/socket.io.js"></script>
+
+<polymer-element name="sb-socket" assetpath="">
+    <template></template>
+    <script>Polymer("sb-socket",{socket:null,id:"",user:null,listeners:{},gameEvents:["game-update","roll","finished","button-state-update","subscribed","unsubscribed"],ready:function(){document.querySelector("sb-user").onUserLoad(function(user){this.user=user}.bind(this));this.socket=io.connect("/");this.socket.on("connected",function(data){this.id=data.id}.bind(this));for(var i=0;i<this.gameEvents.length;i++){this.initListenerEvent(this.gameEvents[i])}this.socket.on("game-deleted",function(data){document.querySelector("sb-datastore").deleteGame(data.game);if(data.user!=this.user.username){document.querySelector("sb-toast").addMessage("A game has been deleted by "+data.user)}}.bind(this))},initListenerEvent:function(event){this.socket.on(event,function(data){if(!this.listeners[data.game])return;this.listeners[data.game](event,data)}.bind(this))},subscribe:function(id,callback){this.listeners[id]=callback;this.socket.emit("subscribe",{game:id})},emit:function(event,data){this.socket.emit(event,data)},on:function(event,callback){this.socket.on(event,callback)}});</script>
+</polymer-element></div><div hidden><polymer-element name="sb-app" assetpath="">
+    <template>
+
+        <sb-router defaultroute="home" on-page-change="{{onPageChange}}">
+            <sb-home route="home"></sb-home>
+            <div id="gameParent" route="game"></div>
+        </sb-router>
+
+    </template>
+    <script>Polymer("sb-app",{ds:null,currentGame:null,location:null,observe:{"ds.games":"setGame"},ready:function(){this.ds=document.querySelector("sb-datastore")},onPageChange:function(e){this.location=e.detail;this.setGame()},setGame:function(){if(!this.location)return;if(this.location[0]!="game")return;if(this.currentGame&&this.currentGame.data.id==this.location[1])return;if(this.currentGame){this.currentGame.state="background";$(this.currentGame).remove()}this.currentGame=null;for(var i=0;i<this.ds.games.length;i++){if(this.ds.games[i].data.id==this.location[1]){this.currentGame=this.ds.games[i]}}if(this.currentGame){this.currentGame.state="play";$(this.$.gameParent).append(this.currentGame)}}});</script>
+</polymer-element></div>

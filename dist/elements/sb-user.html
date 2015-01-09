@@ -1,0 +1,25 @@
+<polymer-element name="sb-user">
+    <template>
+        <h4>Welcome, {{data.username}}</h4>
+
+    </template>
+    <script>
+        Polymer('sb-user', {
+            data : null,
+            listeners : [],
+            ready : function() {
+                $.get('/rest/user', function(resp){
+                    this.data = resp;
+                    for( var i = 0; i < this.listeners.length; i++ ) {
+                        this.listeners[i](this.data);
+                    }
+                    this.listeners = [];
+                }.bind(this));
+            },
+            onUserLoad : function(fn) {
+                if( this.data != null ) fn(this.data);
+                else this.listeners.push(fn);
+            }
+        });
+    </script>
+</polymer-element>

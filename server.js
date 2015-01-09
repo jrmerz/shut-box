@@ -11,6 +11,13 @@ var socket = require('./lib/socket.js');
 var mongo = require('./lib/mongo.js');
 
 
+var isProd = false;
+var isLocal = false;
+process.argv.forEach(function (val, index, array) {
+ if( val == '--prod' ) isProd = true;
+ if( val == '--local' ) isLocal = true;
+});
+
 mongo.connect(function(err) {
     if( err ) return console.log(err);
     onConnection();
@@ -19,11 +26,11 @@ mongo.connect(function(err) {
 
 function onConnection() {
 
-    auth.init(app, io, mongo);
+    auth.init(app, io, mongo, isLocal);
     socket.init(io);
     games.init(app, mongo, socket);
 
-    app.use(express.static(__dirname + '/app'));
+    app.use(express.static(__dirname +  (isProd ? '/dist' : '/app') ));
 
 
     app.get('/rest/players', function(req, resp){

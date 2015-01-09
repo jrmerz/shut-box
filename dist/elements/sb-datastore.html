@@ -1,0 +1,51 @@
+<polymer-element name="sb-datastore">
+    <template></template>
+    <script>
+        Polymer('sb-datastore', {
+            games : [],
+
+            observe : {
+                games : 'fireUpdate'
+            },
+
+            ready : function() {
+                this.loadGames();
+            },
+
+            addGame : function(gameEle) {
+                this.games.push(gameEle);
+            },
+
+            deleteGame : function(gameId) {
+                for( var i = 0; i < this.games.length; i++ ) {
+                    if( this.games[i].data.id == gameId ) {
+                        this.games.splice(i, 1);
+                        return;
+                    }
+                }
+            },
+
+            loadGame : function(gameId) {
+                $.get('/rest/game?id='+gameId, function(game){
+                    var gameEle = document.createElement('sb-game');
+                    gameEle.setData(game);
+                    this.games.push(gameEle);
+                }.bind(this));
+            },
+
+            loadGames : function() {
+                $.get('/rest/games', function(games){
+                    for( var i = 0; i < games.length; i++ ) {
+                        var gameEle = document.createElement('sb-game');
+                        gameEle.setData(games[i]);
+                        this.games.push(gameEle);
+                    }
+                }.bind(this));
+            },
+
+            fireUpdate : function() {
+                this.fire('update', this.games);
+            }
+        });
+    </script>
+</polymer-element>

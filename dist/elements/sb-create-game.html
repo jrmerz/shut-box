@@ -1,0 +1,64 @@
+<polymer-element name="sb-create-game">
+    <template>
+        <!--<div hidden?="{{state != 'init'}}">-->
+        <button on-click="{{create}}" class="btn btn-default">Create Game</button>
+        <!--</div>-->
+
+        <!--<div hidden?="{{state != 'creating'}}">
+            <sb-player-search on-select="{{addPlayer}}"></sb-player-search>            
+
+            <div><a href="game/{{data.id}}">Go to game</a></div>
+        </div>-->
+
+    </template>
+    <script>
+        Polymer('sb-create-game', {
+            state : 'init',
+            socket : null,
+
+            game : null,
+            ds   : null,
+            data : null,
+
+            ready : function() {
+                document.querySelector('sb-user').onUserLoad(function(user){
+                    this.user = user;
+                }.bind(this));
+                this.ds = document.querySelector('sb-datastore');
+                this.socket = document.querySelector('sb-socket');
+            },
+
+            create : function() {
+                this.state = 'creating';
+
+                var gameEle = document.createElement('sb-game');
+                gameEle.create(this.user.username)
+                this.data = gameEle.getData();
+
+                this.ds.addGame(gameEle);
+                this.game = gameEle;
+
+                $.ajax({
+                    type : 'POST',
+                    url  : '/rest/saveGame?socket='+this.socket.id,
+                    data : {game: JSON.stringify(this.data)},
+                    success : function() {
+                        document.querySelector('sb-toast').addMessage('Game Create!');
+
+                        // now subscribe to game
+                        this.socket.emit('subscribe', {game: gameEle.data.id});
+                    }.bind(this),
+                    error : function() {
+
+                    }
+                });
+            },
+
+            addPlayer : function(e) {
+                var player = e.detail;
+                this.game.addPlayer(player);
+            }
+
+        });
+    </script>
+</polymer-element>
