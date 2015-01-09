@@ -1,13 +1,24 @@
 <script src="/socket.io.js"></script>
 
 <polymer-element name="sb-socket">
-    <template></template>
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+        </style>
+        Status: 
+        <span hidden?="{{state != 'connected'}}" style="color:green">Connected</span>
+        <span hidden?="{{state != 'connecting'}}" style="color:#888">Connecting...</span>
+        <span hidden?="{{state != 'disconnected'}}" style="color:red">Disconnected</span>
+    </template>
     <script>
         Polymer('sb-socket', {
             socket : null,
             id : '',
             user : null,
             listeners : {},
+            state : 'connecting',
 
             gameEvents : ['game-update', 'roll', 'finished', 'button-state-update','subscribed','unsubscribed'],
 
@@ -21,7 +32,14 @@
 
                 this.socket.on('connected', function(data){
                     this.id = data.id;
+                    this.state = 'connected';
                 }.bind(this));
+
+                this.socket.on('disconnect', function(data){
+                    this.id = data.id;
+                    this.state = 'disconnected';
+                }.bind(this));
+
 
                 for( var i = 0; i < this.gameEvents.length; i++ ) {
                     this.initListenerEvent(this.gameEvents[i]);

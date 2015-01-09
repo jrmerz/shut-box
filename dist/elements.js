@@ -1054,6 +1054,7 @@ return c[b]},styleCacheForScope:function(a){if(d){var b=a.host?a.host.localName:
             id : '',
             user : null,
             listeners : {},
+            state : 'connecting',
 
             gameEvents : ['game-update', 'roll', 'finished', 'button-state-update','subscribed','unsubscribed'],
 
@@ -1067,7 +1068,14 @@ return c[b]},styleCacheForScope:function(a){if(d){var b=a.host?a.host.localName:
 
                 this.socket.on('connected', function(data){
                     this.id = data.id;
+                    this.state = 'connected';
                 }.bind(this));
+
+                this.socket.on('disconnect', function(data){
+                    this.id = data.id;
+                    this.state = 'disconnected';
+                }.bind(this));
+
 
                 for( var i = 0; i < this.gameEvents.length; i++ ) {
                     this.initListenerEvent(this.gameEvents[i]);

@@ -1031,7 +1031,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <div hidden><script src="/socket.io.js"></script>
 
 <polymer-element name="sb-socket" assetpath="elements/">
-    <template></template>
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+        </style>
+        Status: 
+        <span hidden?="{{state != &apos;connected&apos;}}" style="color:green">Connected</span>
+        <span hidden?="{{state != &apos;connecting&apos;}}" style="color:#888">Connecting...</span>
+        <span hidden?="{{state != &apos;disconnected&apos;}}" style="color:red">Disconnected</span>
+    </template>
     
 </polymer-element></div>
 <div hidden><polymer-element name="sb-app" assetpath="elements/">
